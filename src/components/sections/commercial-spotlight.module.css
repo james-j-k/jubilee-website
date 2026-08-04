@@ -1,0 +1,105 @@
+.section {
+  position: relative;
+  overflow: clip;
+  background: hsl(var(--surface-subtle));
+}
+
+.layout {
+  align-items: center;
+}
+
+.copy {
+  max-width: 35rem;
+}
+
+.eyebrow,
+.contextLabel {
+  margin: 0;
+  color: hsl(var(--primary));
+  font-size: var(--text-metadata);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-metadata);
+  line-height: var(--leading-metadata);
+  text-transform: uppercase;
+}
+
+.copy h2 {
+  max-width: 10ch;
+  margin: 0;
+  color: hsl(var(--foreground));
+  font-size: var(--text-display);
+  font-weight: var(--font-weight-display);
+  letter-spacing: var(--tracking-display);
+  line-height: var(--leading-display);
+  text-wrap: balance;
+}
+
+.detail {
+  max-width: 33rem;
+  margin: 0;
+  color: hsl(var(--muted-foreground));
+  font-size: var(--text-body-lg);
+  line-height: var(--leading-body);
+}
+
+.cta {
+  border-radius: var(--radius-sm);
+  background: hsl(var(--action));
+  color: hsl(var(--action-foreground));
+}
+
+.cta:hover { background: hsl(var(--institutional-navy)); }
+
+.context {
+  position: relative;
+  min-height: 22rem;
+  overflow: hidden;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius-lg);
+  background: hsl(var(--surface));
+  padding: var(--space-6) var(--space-5);
+}
+
+.divider { margin: var(--space-5) 0; }
+
+.establishments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.establishments li { display: flex; }
+
+.establishments :global(span) {
+  border-color: hsl(var(--border));
+  background: hsl(var(--surface-subtle));
+  color: hsl(var(--foreground));
+}
+
+.contextNote {
+  max-width: 26rem;
+  margin: var(--space-6) 0 0;
+  color: hsl(var(--muted-foreground));
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+}
+
+.terrain {
+  position: absolute;
+  right: -7%;
+  bottom: -1%;
+  left: -9%;
+  width: 116%;
+  color: hsl(var(--accent) / 0.4);
+}
+
+@media (min-width: 48rem) {
+  .context { padding: var(--space-7) var(--space-6); }
+}
+
+@media (min-width: 64rem) {
+  .context { min-height: 29rem; padding: var(--space-8) var(--space-7); }
+}

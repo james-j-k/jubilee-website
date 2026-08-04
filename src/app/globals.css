@@ -1,0 +1,78 @@
+@import "../styles/tokens.css";
+@import "../styles/motion.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+    box-sizing: border-box;
+  }
+
+  html {
+    @apply bg-background text-foreground;
+    scroll-behavior: smooth;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply min-h-screen bg-background font-sans antialiased;
+    font-feature-settings: "kern", "liga", "clig", "calt";
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--focus));
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    background: hsl(var(--primary-soft));
+    color: hsl(var(--foreground));
+  }
+
+  section[id],
+  main[id] {
+    scroll-margin-top: 7rem;
+  }
+}
+
+.skip-link {
+  position: fixed;
+  z-index: var(--z-toast);
+  top: var(--space-3);
+  left: var(--space-3);
+  transform: translateY(-200%);
+  border-radius: var(--radius-sm);
+  background: hsl(var(--foreground));
+  color: hsl(var(--surface));
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: none;
+  transition: transform var(--duration-micro) var(--ease-standard);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+@media (max-width: 47.9375rem) {
+  body {
+    padding-bottom: calc(3.5rem + env(safe-area-inset-bottom));
+  }
+}

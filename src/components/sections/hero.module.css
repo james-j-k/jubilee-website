@@ -1,0 +1,406 @@
+.hero {
+  --canvas: #f8f7f4;
+  --graphite: #10254b;
+  --body: #596170;
+  --red: #cb1a35;
+  --ember: #eb5900;
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--canvas);
+  color: var(--graphite);
+}
+
+.mineralCanvas {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  background:
+    radial-gradient(circle at 76% 45%, rgb(203 26 53 / 7%), transparent 24rem),
+    linear-gradient(135deg, #fbfaf8 0%, var(--canvas) 54%, #f2f0ec 100%);
+}
+
+.mineralCanvas::after {
+  position: absolute;
+  inset: 0;
+  opacity: 0.17;
+  background-image: radial-gradient(rgb(17 24 39 / 19%) 0.42px, transparent 0.65px);
+  background-size: 5px 5px;
+  content: "";
+  mix-blend-mode: soft-light;
+}
+
+.shell {
+  display: flex;
+  min-height: 100vh;
+  min-height: 100svh;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 1.25rem;
+  flex-direction: column;
+}
+
+.eyebrow {
+  color: #6b7280;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.content {
+  display: grid;
+  flex: 1;
+  align-items: center;
+  gap: 2rem;
+  padding: 4.5rem 0 1.25rem;
+}
+
+.copy {
+  max-width: 32.5rem;
+}
+
+.officialRail {
+  max-width: 24rem;
+  margin-bottom: 1.25rem;
+}
+
+.officialRail p {
+  color: hsl(var(--primary));
+  font-weight: var(--font-weight-semibold);
+}
+
+.officialLockup {
+  display: block;
+  width: 13rem;
+  height: auto;
+}
+
+.eyebrow {
+  margin: 0 0 1rem;
+  font-weight: 600;
+  animation: copyEnter 340ms 80ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.copy h1 {
+  max-width: 10ch;
+  margin: 0;
+  color: var(--graphite);
+  font-size: 2.875rem;
+  font-weight: 540;
+  letter-spacing: -0.06em;
+  line-height: 0.98;
+  text-wrap: balance;
+  animation: copyEnter 340ms 140ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.copy h1 span {
+  display: block;
+}
+
+.intro {
+  max-width: 31rem;
+  margin: 1.25rem 0 0;
+  color: var(--body);
+  font-size: 1.0625rem;
+  font-weight: 400;
+  line-height: 1.5;
+  text-wrap: pretty;
+  animation: copyEnter 340ms 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.primaryAction {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.56rem;
+  margin-top: 1.75rem;
+  padding: 0 1.28rem 0 1.35rem;
+  border-radius: 0.375rem;
+  background: var(--graphite);
+  box-shadow: 0 8px 18px rgb(17 24 39 / 14%);
+  color: #fff;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  transition: transform 160ms ease-out, background-color 160ms ease-out, box-shadow 160ms ease-out;
+  animation: copyEnter 340ms 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.primaryAction:hover {
+  transform: translateY(-2px);
+  background: #173461;
+  box-shadow: 0 11px 23px rgb(17 24 39 / 17%);
+}
+
+.primaryAction svg {
+  transition: transform 160ms ease-out;
+}
+
+.primaryAction:hover svg {
+  transform: translate(2px, -2px);
+}
+
+.plaqueFrame {
+  position: relative;
+  width: 100%;
+  max-height: 23.125rem;
+  aspect-ratio: 4 / 3;
+  animation: plaqueEnter 370ms 150ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.plaqueFrame::before {
+  position: absolute;
+  z-index: -1;
+  top: 8%;
+  right: -7%;
+  bottom: 7%;
+  left: 10%;
+  border-radius: 38% 62% 53% 47% / 54% 47% 53% 46%;
+  background: rgb(203 26 53 / 9%);
+  content: "";
+  filter: blur(20px);
+}
+
+.plaque {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 68%);
+  border-radius: 1.25rem;
+  background: linear-gradient(145deg, rgb(255 255 255 / 56%), rgb(255 255 255 / 45%));
+  box-shadow: inset 0 1px rgb(255 255 255 / 88%), 0 22px 48px rgb(17 24 39 / 11%);
+  backdrop-filter: blur(16px) saturate(110%);
+  -webkit-backdrop-filter: blur(16px) saturate(110%);
+}
+
+.plaque::before {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgb(248 247 244 / 68%) 0%, rgb(248 247 244 / 22%) 52%, rgb(248 247 244 / 8%) 100%);
+  content: "";
+}
+
+.plaqueReadingLayer {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  align-content: start;
+  height: 53%;
+  padding: clamp(1.35rem, 5vw, 2.5rem);
+}
+
+.plaqueBrand,
+.plaqueLabel,
+.plaqueValue {
+  margin: 0;
+}
+
+.plaqueBrand {
+  color: #5d6571;
+  font-size: 0.6875rem;
+  font-weight: 650;
+  letter-spacing: 0.075em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.plaqueLabel {
+  margin-top: 0.62rem;
+  color: #717985;
+  font-size: 0.6875rem;
+  font-weight: 650;
+  line-height: 1.25;
+}
+
+.plaqueValue {
+  max-width: 11ch;
+  margin-top: 0.52rem;
+  color: #232a36;
+  font-size: 1.25rem;
+  font-weight: 560;
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+}
+
+.routeArea {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 52%;
+}
+
+.route {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.routeBase {
+  stroke: rgb(17 24 39 / 16%);
+  stroke-width: 1.15;
+}
+
+.routeActive {
+  stroke: url(#jubilee-energy-route);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-dasharray: 650;
+  stroke-dashoffset: 650;
+  animation: drawRoute 420ms 420ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+.routeNode {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+  color: #58606d;
+  font-size: 0.75rem;
+  font-weight: 600;
+  opacity: 0;
+  animation: nodeEnter 240ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.routeNode i {
+  display: block;
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 999px;
+  background: var(--red);
+  box-shadow: 0 0 0 3px rgb(203 26 53 / 12%);
+}
+
+.homeNode {
+  bottom: 18%;
+  left: 14%;
+  animation-delay: 580ms;
+}
+
+.commercialNode {
+  top: 20%;
+  right: 11%;
+  animation-delay: 640ms;
+}
+
+@keyframes copyEnter {
+  from { opacity: 0.92; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes plaqueEnter {
+  from { opacity: 0.94; transform: scale(0.99); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes drawRoute {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes nodeEnter {
+  from { opacity: 0.7; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .plaque {
+    background: rgb(248 247 244 / 94%);
+  }
+}
+
+@media (min-width: 480px) {
+  .shell { padding-inline: 1.5rem; }
+}
+
+@media (min-width: 768px) {
+  .hero,
+  .shell {
+    min-height: max(100svh, 760px);
+  }
+
+  .shell {
+    padding: 2rem 3rem;
+  }
+
+  .content {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    column-gap: 8.333%;
+    padding: 4rem 0;
+  }
+
+  .copy h1 { font-size: 4.125rem; }
+  .officialRail { margin-bottom: 1.5rem; }
+  .officialLockup { width: 16rem; }
+  .intro { font-size: 1.125rem; }
+  .primaryAction { min-height: 3.25rem; }
+  .plaqueFrame { aspect-ratio: 5 / 4; }
+  .eyebrow { font-size: 0.8125rem; }
+  .plaqueBrand,
+  .plaqueLabel { font-size: 0.75rem; }
+  .plaqueValue { font-size: 1.5rem; }
+}
+
+@media (min-width: 1280px) {
+  .shell {
+    width: calc(100% - 6rem);
+    max-width: 75rem;
+    padding-inline: 0;
+  }
+
+  .content {
+    min-height: 41rem;
+    padding: 6rem 0;
+  }
+
+  .copy { max-width: 32.5rem; }
+}
+
+@media (min-width: 1440px) {
+  .copy h1 { font-size: 5rem; }
+  .intro { font-size: 1.1875rem; }
+  .primaryAction { font-size: 1rem; }
+  .plaqueValue { font-size: 1.625rem; }
+}
+
+@media (min-width: 1600px) {
+  .shell {
+    width: calc(100% - 10rem);
+    max-width: 90rem;
+    padding-inline: 0;
+  }
+
+  .plaqueFrame { max-width: 40rem; justify-self: end; }
+}
+
+@media (max-width: 359px) {
+  .shell { padding-inline: 1.25rem; }
+  .copy h1 { font-size: 2.875rem; }
+  .primaryAction { width: 100%; }
+}
+
+@media (max-width: 479px) {
+  .plaque {
+    backdrop-filter: blur(14px) saturate(105%);
+    -webkit-backdrop-filter: blur(14px) saturate(105%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero *,
+  .hero *::before,
+  .hero *::after {
+    animation-delay: 0ms !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+  }
+}
