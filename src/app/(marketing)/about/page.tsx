@@ -9,21 +9,25 @@ import team from "../../../../photos/team-about us.jpg";
 import withCustomers from "../../../../photos/with customers- about us.jpg";
 import withCustomer from "../../../../photos/with one of beloved customer.jpg";
 import { ContactCard } from "@/components/contact";
+import { JsonLd } from "@/components/seo";
 import { Container, Section, StructuredPanel } from "@/components/layout";
 import { ImageFrame, OfficialBrandRail, SectionHeading } from "@/components/ui";
 import { aboutPage } from "@/content/about-page";
 import { createPageMetadata } from "@/lib/metadata";
+import { breadcrumbJsonLd } from "@/lib/schema";
 
 import styles from "@/components/about/about-page.module.css";
 
 export const metadata = createPageMetadata({
   title: "About Jubilee",
+  path: "/about",
   description: "Meet the people, place, and local operating context behind Jubilee Indane Home in Pala.",
 });
 
 export default function AboutJubileePage() {
   return (
     <main id="main-content" className={styles.page}>
+      <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "About Jubilee", path: "/about" }])} />
       <section className={styles.hero} aria-labelledby="about-page-title">
         <Container>
           <div className={styles.heroGrid}>

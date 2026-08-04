@@ -2,21 +2,25 @@ import Image from "next/image";
 
 import jubileeLogo from "../../../../logo/jubilee-logo.jpg";
 import { ContactCard } from "@/components/contact";
+import { JsonLd } from "@/components/seo";
 import { Container, Section, StructuredPanel } from "@/components/layout";
 import { Button, OfficialBrandRail, SectionHeading } from "@/components/ui";
 import { safetyPage } from "@/content/safety-page";
 import { createPageMetadata } from "@/lib/metadata";
+import { breadcrumbJsonLd } from "@/lib/schema";
 
 import styles from "@/components/safety/safety-page.module.css";
 
 export const metadata = createPageMetadata({
   title: "Safety Resource Center",
+  path: "/safety",
   description: "Official IndianOil LPG safety guidance and local support from Jubilee Indane Home.",
 });
 
 export default function SafetyPage() {
   return (
     <main id="main-content" className={styles.page}>
+      <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Safety", path: "/safety" }])} />
       <section className={styles.hero} aria-labelledby="safety-page-title">
         <Container>
           <div className={styles.heroGrid}>

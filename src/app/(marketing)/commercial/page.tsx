@@ -3,21 +3,25 @@ import Image from "next/image";
 import jubileeLogo from "../../../../logo/jubilee-logo.jpg";
 import { CommercialEnquiryForm } from "@/components/commercial/commercial-enquiry-form";
 import { ContactCard } from "@/components/contact";
+import { JsonLd } from "@/components/seo";
 import { Container, Section, StructuredPanel } from "@/components/layout";
 import { OfficialBrandRail, SectionHeading, Tag } from "@/components/ui";
 import { commercialPage } from "@/content/commercial-page";
 import { createPageMetadata } from "@/lib/metadata";
+import { breadcrumbJsonLd } from "@/lib/schema";
 
 import styles from "@/components/commercial/commercial-page.module.css";
 
 export const metadata = createPageMetadata({
   title: "Commercial LPG",
+  path: "/commercial",
   description: "Commercial LPG support for businesses in Jubilee Indane Home’s Pala-centred service area.",
 });
 
 export default function CommercialPage() {
   return (
     <main id="main-content" className={styles.page}>
+      <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Commercial LPG", path: "/commercial" }])} />
       <section className={styles.hero} aria-labelledby="commercial-page-title">
         <Container>
           <div className={styles.heroGrid}>

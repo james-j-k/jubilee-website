@@ -2,21 +2,25 @@ import Image from "next/image";
 
 import jubileeLogo from "../../../../logo/jubilee-logo.jpg";
 import { ContactCard } from "@/components/contact";
+import { JsonLd } from "@/components/seo";
 import { Container, Section, StructuredPanel } from "@/components/layout";
 import { OfficialBrandRail, SectionHeading } from "@/components/ui";
 import { domesticPage } from "@/content/domestic-page";
 import { createPageMetadata } from "@/lib/metadata";
+import { breadcrumbJsonLd } from "@/lib/schema";
 
 import styles from "@/components/domestic/domestic-page.module.css";
 
 export const metadata = createPageMetadata({
   title: "Domestic LPG",
+  path: "/services",
   description: "Domestic LPG support, booking guidance, and direct assistance from Jubilee Indane Home in Pala.",
 });
 
 export default function DomesticLpgPage() {
   return (
     <main id="main-content" className={styles.page}>
+      <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Domestic LPG", path: "/services" }])} />
       <section className={styles.hero} aria-labelledby="domestic-page-title">
         <Container>
           <div className={styles.heroGrid}>

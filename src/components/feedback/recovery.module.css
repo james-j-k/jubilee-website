@@ -1,0 +1,22 @@
+.page { align-items: center; background: hsl(var(--background)); display: flex; min-height: 100svh; padding: var(--space-8) 0; }
+.content { max-width: var(--reading-width); }
+.eyebrow { color: hsl(var(--primary)); font-size: var(--text-metadata); font-weight: var(--font-weight-semibold); letter-spacing: var(--tracking-metadata); line-height: var(--leading-metadata); margin: 0; text-transform: uppercase; }
+.title { color: hsl(var(--foreground)); font-size: var(--text-display); font-weight: var(--font-weight-display); letter-spacing: var(--tracking-display); line-height: var(--leading-display); margin: var(--space-3) 0 0; max-width: 12ch; text-wrap: balance; }
+.copy { color: hsl(var(--muted-foreground)); font-size: var(--text-body-lg); line-height: var(--leading-body); margin: var(--space-5) 0 0; max-width: 37rem; }
+.actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-6); }
+.links { border-top: 1px solid hsl(var(--border)); display: flex; flex-wrap: wrap; gap: var(--space-3) var(--space-5); margin: var(--space-7) 0 0; padding: var(--space-5) 0 0; }
+.links a { border-radius: var(--radius-sm); color: hsl(var(--foreground)); font-size: var(--text-body); font-weight: var(--font-weight-semibold); text-decoration: none; text-underline-offset: 0.2em; }
+.links a:hover { text-decoration: underline; }
+.links a:focus-visible { outline: 2px solid hsl(var(--focus)); outline-offset: 3px; }
+
+.loadingPage { background: hsl(var(--background)); min-height: 100svh; padding: calc(var(--section-space) + var(--space-4)) 0 var(--section-space); }
+.skeleton { animation: pulse 1.8s var(--ease-standard) infinite; background: hsl(var(--surface-subtle)); border-radius: var(--radius-md); }
+.rail { height: 2.25rem; max-width: 18rem; }
+.heading { height: clamp(7rem, 19vw, 11rem); margin-top: var(--space-6); max-width: 42rem; }
+.body { height: 1.25rem; margin-top: var(--space-5); max-width: 34rem; }
+.bodyShort { height: 1.25rem; margin-top: var(--space-3); max-width: 27rem; }
+.actionsSkeleton { display: flex; gap: var(--space-3); margin-top: var(--space-6); }
+.action { height: 3rem; width: 10rem; }
+.panel { height: 12rem; margin-top: var(--space-9); width: 100%; }
+@keyframes pulse { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .skeleton { animation: none; opacity: 0.75; } }

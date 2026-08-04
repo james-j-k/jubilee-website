@@ -6,14 +6,19 @@ import { LocalAccountability } from "@/components/sections/local-accountability"
 import { ProofTrust } from "@/components/sections/proof-trust";
 import { SafetyResponsibility } from "@/components/sections/safety-responsibility";
 import { localBusinessJsonLd } from "@/lib/schema";
+import { JsonLd } from "@/components/seo";
+import { createPageMetadata } from "@/lib/metadata";
 import { Services } from "@/components/sections/services";
+
+export const metadata = createPageMetadata({
+  title: "Authorised Indane Distributor in Pala",
+  description: "Authorised Indane Distributor for domestic and commercial LPG support in Pala.",
+  path: "/",
+});
 
 export default function HomePage() {
   return <>
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd()) }}
-    />
+    <JsonLd data={localBusinessJsonLd()} />
     <Hero />
     <LocalAccountability />
     <JubileeDifference />

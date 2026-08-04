@@ -10,7 +10,7 @@ import styles from "./site-footer.module.css";
 
 const serviceLinks = [
   { href: "/services", label: "Domestic LPG" },
-  { href: "/#commercial", label: "Commercial LPG" },
+  { href: "/commercial", label: "Commercial LPG" },
 ] as const;
 
 const quickLinks = [
