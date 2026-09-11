@@ -6,12 +6,12 @@ export const jubileeDifference = [
       "Deliveries are planned route-wise for Pala’s urban neighbourhoods and hilly rural areas.",
   },
   {
-    title: "Local operating context",
+    title: "Local context",
     detail:
       "Planning reflects the region’s mixed geography instead of treating every route as the same.",
   },
   {
-    title: "Home and commercial support",
+    title: "Versatile support",
     detail:
       "Jubilee serves both domestic and commercial customers across its Pala-centred service area.",
   },

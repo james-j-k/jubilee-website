@@ -1,34 +1,72 @@
-import { GodownCard, OfficeCard } from "@/components/contact";
-import { SectionHeading } from "@/components/ui";
-import { Container, Section, SplitLayout } from "@/components/layout";
+import { MapPin, MessageCircle, Phone } from "lucide-react";
+
+import { contactConfig } from "@/content/contact";
+import { externalLinkProps, mapsHref, phoneHref, whatsappHref } from "@/lib/contact";
 
 import { ContactEnquiryForm } from "./contact-enquiry-form";
 import styles from "./contact-visit.module.css";
 
 export function ContactVisit() {
   return (
-    <Section id="contact" className={styles.section} tone="surface" aria-labelledby="contact-visit-title">
-      <Container>
-        <SectionHeading
-          as="h2"
-          eyebrow="Contact & Visit"
-          title="Speak to Jubilee, your way."
-          description="Call, message, email, or visit Jubilee Indane Home in Pala."
-          id="contact-visit-title"
-          className={styles.heading}
-        />
+    <section id="contact" className={styles.section}>
+      <div className={styles.shell}>
+        <p className={styles.eyebrow}>Contact &amp; Visit</p>
+        <h2 className={styles.title}>
+          Speak to Jubilee, <span className={styles.emphasis}>your way.</span>
+        </h2>
 
-        <SplitLayout ratio="content" className={styles.primaryGrid}>
-          <OfficeCard className={styles.officeCard} />
+        <div className={styles.primaryGrid}>
+          <div className={styles.officeCard}>
+            <div>
+              <p className={styles.cardEyebrow}>Office information</p>
+              <address className={styles.officeAddress}>
+                {contactConfig.office.addressLines.map((line) => <span key={line}>{line}</span>)}
+              </address>
+            </div>
+            <div className={styles.officeFooter}>
+              <p className={styles.cardEyebrow}>Office hours</p>
+              <p className={styles.officeHours}>
+                {contactConfig.office.hours[0]} · {contactConfig.office.hours[1]}
+              </p>
+              <div className={styles.officeLinks}>
+                <a href={phoneHref()}>
+                  <Phone aria-hidden="true" size={20} strokeWidth={2.25} />
+                  {contactConfig.phone.display}
+                </a>
+                <a href={whatsappHref()} {...externalLinkProps}>
+                  <MessageCircle aria-hidden="true" size={20} strokeWidth={2.25} />
+                  WhatsApp Jubilee
+                </a>
+              </div>
+            </div>
+          </div>
 
           <ContactEnquiryForm />
-        </SplitLayout>
-
-        <div className={styles.locations} aria-label="Jubilee locations">
-          <OfficeCard title="Office" features={["directions"]} />
-          <GodownCard />
         </div>
-      </Container>
-    </Section>
+
+        <div className={styles.locations}>
+          <a className={styles.locationCard} href={mapsHref("office")} {...externalLinkProps}>
+            <span>
+              <span className={styles.cardEyebrow}>Office</span>
+              <strong>Municipal Complex</strong>
+            </span>
+            <span className={styles.locationCta}>
+              <MapPin aria-hidden="true" size={16} strokeWidth={2.5} />
+              Directions
+            </span>
+          </a>
+          <a className={styles.locationCard} href={mapsHref("godown")} {...externalLinkProps}>
+            <span>
+              <span className={styles.cardEyebrow}>Jubilee godown</span>
+              <strong>LPG storage unit</strong>
+            </span>
+            <span className={styles.locationCta}>
+              <MapPin aria-hidden="true" size={16} strokeWidth={2.5} />
+              Directions
+            </span>
+          </a>
+        </div>
+      </div>
+    </section>
   );
 }

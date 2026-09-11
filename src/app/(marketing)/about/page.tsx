@@ -15,6 +15,7 @@ import { ImageFrame, OfficialBrandRail, SectionHeading } from "@/components/ui";
 import { aboutPage } from "@/content/about-page";
 import { createPageMetadata } from "@/lib/metadata";
 import { breadcrumbJsonLd } from "@/lib/schema";
+import { cn } from "@/lib/utils";
 
 import styles from "@/components/about/about-page.module.css";
 
@@ -45,7 +46,7 @@ export default function AboutJubileePage() {
         </Container>
       </section>
 
-      <Section className={styles.section} tone="surface" aria-labelledby="place-title">
+      <Section className={cn(styles.section, styles.place)} aria-labelledby="place-title">
         <Container>
           <SectionHeading as="h2" eyebrow="A real place in Pala" title="The place behind the work." description="Jubilee operates from a physical office in Pala—a familiar local point of contact for domestic and commercial customers." id="place-title" className={styles.heading} />
           <div className={styles.placeGrid}>
@@ -53,7 +54,7 @@ export default function AboutJubileePage() {
               <Image src={office} alt="Jubilee Indane Home office in Pala" className={styles.officePhoto} />
             </ImageFrame>
             <div className={styles.officeNarrative}>
-              <ImageFrame className={styles.officeCloseupFrame} caption="The Jubilee Indane Home office entrance.">
+              <ImageFrame className={styles.officeCloseupFrame} caption="The Jubilee Indane Home office entrance." priority="feature">
                 <Image src={officeCloseup} alt="Entrance to the Jubilee Indane Home office" className={styles.officeCloseup} />
               </ImageFrame>
               <StructuredPanel>

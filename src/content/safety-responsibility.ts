@@ -3,7 +3,7 @@
  * belong on the reviewed Safety page rather than in this overview.
  */
 export const safetyResponsibility = {
-  title: "Safety is part of responsible LPG service.",
+  title: "Safety is part of responsible service.",
   description:
     "Jubilee treats safe LPG practices and clear customer guidance as part of a responsible distributor relationship.",
   topics: [
@@ -16,7 +16,7 @@ export const safetyResponsibility = {
       detail: "Keep safe LPG use and routine awareness within reach.",
     },
     {
-      title: "When you need guidance",
+      title: "Expert guidance",
       detail: "Use the dedicated safety guidance route for the appropriate next step.",
     },
   ],

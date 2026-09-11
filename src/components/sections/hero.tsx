@@ -6,17 +6,9 @@ import jubileeLogo from "../../../logo/jubilee-logo.jpg";
 import { OfficialBrandRail } from "@/components/ui";
 import styles from "./hero.module.css";
 
-/**
- * Approved Premium Infrastructure hero.
- *
- * It intentionally renders the no-image, no-locality, and no-proof fallback
- * state until operational inputs are approved in the content system.
- */
 export function Hero() {
   return (
     <main id="main-content" className={styles.hero}>
-      <div className={styles.mineralCanvas} aria-hidden="true" />
-
       <div className={styles.shell}>
         <section className={styles.content} aria-labelledby="hero-title">
           <div className={styles.copy}>
@@ -29,8 +21,7 @@ export function Hero() {
             <p className={styles.eyebrow}>For homes and businesses.</p>
 
             <h1 id="hero-title">
-              Reliable LPG support.
-              <span>From Jubilee Indane Home.</span>
+              Reliable <span>LPG</span> support.
             </h1>
 
             <p className={styles.intro}>
@@ -40,45 +31,29 @@ export function Hero() {
 
             <Link className={styles.primaryAction} href="/#contact">
               Contact Jubilee Indane Home
-              <ArrowUpRight aria-hidden="true" size={18} strokeWidth={2.25} />
+              <ArrowUpRight aria-hidden="true" size={20} strokeWidth={2.5} />
             </Link>
           </div>
 
           <div className={styles.plaqueFrame} aria-hidden="true">
             <div className={styles.plaque}>
               <div className={styles.plaqueReadingLayer}>
-                <p className={styles.plaqueBrand}>Jubilee Indane Home</p>
-                <p className={styles.plaqueLabel}>The Jubilee Standard</p>
-                <p className={styles.plaqueValue}>Start with clarity.</p>
+                <p className={styles.plaqueBrand}>The Jubilee Standard</p>
+                <p className={styles.plaqueValue}>
+                  Start with <span>clarity.</span>
+                </p>
               </div>
 
               <div className={styles.routeArea}>
                 <svg
                   className={styles.route}
-                  viewBox="0 0 600 210"
+                  viewBox="0 0 400 120"
                   fill="none"
                   role="presentation"
                 >
-                  <defs>
-                    <linearGradient
-                      id="jubilee-energy-route"
-                      x1="74"
-                      y1="168"
-                      x2="526"
-                      y2="42"
-                      gradientUnits="userSpaceOnUse"
-                    >
-                      <stop stopColor="#CB1A35" />
-                      <stop offset="1" stopColor="#EB5900" />
-                    </linearGradient>
-                  </defs>
                   <path
-                    className={styles.routeBase}
-                    d="M52 167C137 167 151 119 231 119C318 119 337 52 435 52C476 52 499 40 548 40"
-                  />
-                  <path
-                    className={styles.routeActive}
-                    d="M52 167C137 167 151 119 231 119C318 119 337 52 435 52C476 52 499 40 548 40"
+                    className={styles.routePath}
+                    d="M20 100 Q 100 0, 200 100 T 380 50"
                   />
                 </svg>
 

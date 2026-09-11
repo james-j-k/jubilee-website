@@ -22,6 +22,11 @@
 .facts { display: grid; gap: var(--space-3); margin: 0; padding: 0; list-style: none; }
 .facts li { padding-left: var(--space-4); border-left: 1px solid hsl(var(--primary)); color: hsl(var(--foreground)); font-size: var(--text-body); line-height: var(--leading-body); }
 
+.place { background: hsl(var(--color-navy)); color: hsl(var(--color-cream)); }
+.place .heading :global(h2) { color: hsl(var(--color-cream)); }
+.place .heading :global(p:first-child) { color: hsl(var(--accent)); }
+.place :global(.text-muted-foreground) { color: hsl(var(--color-cream) / 0.7); }
+
 .people { background: hsl(var(--surface-subtle)); }
 .ownerFrame { max-width: 19rem; }
 .ownerPhoto { object-fit: contain; }
@@ -34,8 +39,8 @@
 .communityCopy p { font-size: var(--text-body); }
 .communityPhotos { display: grid; gap: var(--space-5); }
 .awarenessFrame { max-width: 20rem; }
-.contact { background: hsl(var(--surface-subtle)); }
-.contactPanel { display: grid; gap: var(--space-6); padding: var(--space-6) var(--space-5); border: 1px solid hsl(var(--border)); border-radius: var(--radius-lg); background: hsl(var(--surface)); box-shadow: var(--shadow-panel); }
+.contact { background: hsl(var(--color-navy)); }
+.contactPanel { display: grid; gap: var(--space-6); padding: var(--space-6) var(--space-5); border: 6px solid hsl(var(--accent)); background: hsl(var(--color-cream)); color: hsl(var(--color-navy)); }
 .contactCopy { max-width: 40rem; }
 .contactCopy h2 { margin: var(--space-3) 0 0; color: hsl(var(--foreground)); font-size: var(--text-h2); font-weight: var(--font-weight-display); letter-spacing: var(--tracking-display); line-height: var(--leading-display); text-wrap: balance; }
 .contactCopy > p:last-of-type { margin: var(--space-4) 0 0; color: hsl(var(--muted-foreground)); font-size: var(--text-body); line-height: var(--leading-body); }

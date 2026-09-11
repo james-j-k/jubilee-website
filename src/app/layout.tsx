@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Outfit, Plus_Jakarta_Sans } from "next/font/google";
 
 import indaneIcon from "../../logo/indane_1.jpg";
 import { isIndexable, site } from "@/content/site";
@@ -8,9 +8,16 @@ import { organizationJsonLd, websiteJsonLd } from "@/lib/schema";
 
 import "./globals.css";
 
-const geist = Geist({
+const bodyFont = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-geist-sans",
+  weight: ["400", "500", "600"],
+  variable: "--font-body",
+});
+
+const displayFont = Outfit({
+  subsets: ["latin"],
+  weight: ["600", "800"],
+  variable: "--font-display",
 });
 
 export const metadata: Metadata = {
@@ -49,7 +56,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={geist.variable}>
+      <body className={`${bodyFont.variable} ${displayFont.variable}`}>
         <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
         <a className="skip-link" href="#main-content">Skip to main content</a>
         {children}

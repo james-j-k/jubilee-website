@@ -9,7 +9,7 @@ export const services = {
   },
   commercial: {
     label: "Commercial LPG",
-    title: "For the work that keeps moving.",
+    title: "For the work that moves.",
     detail:
       "Jubilee supports commercial LPG customers across its Pala-centred service area.",
     journey: ["Organisation", "Commercial LPG", "Speak to Jubilee"],

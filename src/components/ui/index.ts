@@ -10,4 +10,3 @@ export * from "./map-embed";
 export * from "./official-brand-rail";
 export * from "./section-heading";
 export * from "./tag";
-export * from "./terrain-divider";

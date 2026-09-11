@@ -1,75 +1,69 @@
 .section {
   position: relative;
   overflow: clip;
+  background: hsl(var(--background));
 }
 
 .heading {
-  margin-bottom: var(--space-7);
+  max-width: 48rem;
+  margin-bottom: var(--space-8);
 }
 
-.panel {
-  position: relative;
-  overflow: hidden;
-  padding: var(--space-5);
+.heading :global(h2) {
+  font-size: clamp(2.25rem, 6vw, 3.75rem);
+}
+
+.emphasis {
+  color: hsl(var(--accent));
 }
 
 .principles {
   display: grid;
-  gap: var(--space-6);
   margin: 0;
   padding: 0;
+  border: 4px solid hsl(var(--border));
   list-style: none;
 }
 
-.principles li {
-  position: relative;
+.principle {
+  padding: var(--space-7);
+  border-bottom: 4px solid hsl(var(--border));
+}
+
+.principle:last-child {
+  border-bottom: 0;
 }
 
 .index {
-  color: hsl(var(--primary));
-  font-size: var(--text-metadata);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: var(--tracking-metadata);
-  line-height: var(--leading-metadata);
+  display: block;
+  color: hsl(var(--accent));
+  font-family: var(--font-display);
+  font-size: 2.75rem;
+  font-weight: 800;
+  line-height: 1;
 }
 
 .principles h3 {
-  margin: 0;
-  color: hsl(var(--foreground));
-  font-size: var(--text-h3);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: var(--tracking-heading);
-  line-height: 1.25;
+  margin: var(--space-4) 0 var(--space-3);
+  font-size: 1.5rem;
 }
 
 .principles p {
   max-width: 27rem;
   margin: 0;
-  color: hsl(var(--muted-foreground));
+  color: hsl(var(--foreground) / 0.75);
   font-size: var(--text-body);
+  font-weight: 500;
   line-height: var(--leading-body);
 }
 
-.divider {
-  margin: var(--space-7) 0 var(--space-5);
-}
-
-.terrain {
-  display: block;
-  width: 118%;
-  margin-left: -9%;
-  color: hsl(var(--accent) / 0.42);
-}
-
 @media (min-width: 48rem) {
-  .panel { padding: var(--space-6); }
-  .principles { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-5); }
-  .principles li + li { border-left: 1px solid hsl(var(--border)); padding-left: var(--space-5); }
+  .principles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .principle { border-bottom: 0; border-right: 4px solid hsl(var(--border)); }
+  .principle:last-child { border-right: 0; }
 }
 
 @media (min-width: 64rem) {
-  .heading { margin-bottom: var(--space-8); }
-  .panel { padding: var(--space-7); }
-  .principles { gap: var(--space-7); }
-  .principles li + li { padding-left: var(--space-7); }
+  .heading { margin-bottom: var(--space-9); }
+  .principle { padding: var(--space-8); }
 }

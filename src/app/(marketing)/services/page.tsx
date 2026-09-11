@@ -8,6 +8,7 @@ import { OfficialBrandRail, SectionHeading } from "@/components/ui";
 import { domesticPage } from "@/content/domestic-page";
 import { createPageMetadata } from "@/lib/metadata";
 import { breadcrumbJsonLd } from "@/lib/schema";
+import { cn } from "@/lib/utils";
 
 import styles from "@/components/domestic/domestic-page.module.css";
 
@@ -40,7 +41,7 @@ export default function DomesticLpgPage() {
         </Container>
       </section>
 
-      <Section className={styles.section} tone="surface" aria-labelledby="domestic-services-title">
+      <Section className={cn(styles.section, styles.servicesSection)} aria-labelledby="domestic-services-title">
         <Container>
           <SectionHeading as="h2" eyebrow="Domestic services" title="The right route for your household enquiry." description="Jubilee provides a direct local point of contact for domestic LPG customers and applicants." id="domestic-services-title" className={styles.heading} />
           <StructuredPanel className={styles.panel}>

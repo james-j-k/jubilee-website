@@ -8,6 +8,7 @@ import { Button, OfficialBrandRail, SectionHeading } from "@/components/ui";
 import { safetyPage } from "@/content/safety-page";
 import { createPageMetadata } from "@/lib/metadata";
 import { breadcrumbJsonLd } from "@/lib/schema";
+import { cn } from "@/lib/utils";
 
 import styles from "@/components/safety/safety-page.module.css";
 
@@ -43,7 +44,7 @@ export default function SafetyPage() {
         </Container>
       </section>
 
-      <Section className={styles.section} tone="surface" aria-labelledby="everyday-safety-title">
+      <Section className={cn(styles.section, styles.everydaySection)} aria-labelledby="everyday-safety-title">
         <Container>
           <SectionHeading as="h2" eyebrow="Everyday safety" title="Make official everyday guidance part of the routine." description="These high-level points are drawn from IndianOil’s domestic LPG guidance. Use the official source for complete instructions." id="everyday-safety-title" className={styles.heading} />
           <StructuredPanel className={styles.panel}>

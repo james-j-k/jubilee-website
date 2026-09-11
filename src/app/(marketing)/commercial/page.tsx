@@ -9,6 +9,7 @@ import { OfficialBrandRail, SectionHeading, Tag } from "@/components/ui";
 import { commercialPage } from "@/content/commercial-page";
 import { createPageMetadata } from "@/lib/metadata";
 import { breadcrumbJsonLd } from "@/lib/schema";
+import { cn } from "@/lib/utils";
 
 import styles from "@/components/commercial/commercial-page.module.css";
 
@@ -46,7 +47,7 @@ export default function CommercialPage() {
         </Container>
       </section>
 
-      <Section className={styles.section} tone="surface" aria-labelledby="industries-title">
+      <Section className={cn(styles.section, styles.industriesSection)} aria-labelledby="industries-title">
         <Container>
           <SectionHeading as="h2" eyebrow="Industries we serve" title="Commercial contexts, clearly recognised." description="Jubilee supports commercial LPG customers across a range of local business settings." id="industries-title" className={styles.heading} />
           <StructuredPanel className={styles.panel}>

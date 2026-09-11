@@ -1,10 +1,12 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
 
+import jubileeLogo from "../../../logo/jubilee-logo.jpg";
 import { primaryNavigation } from "@/content/navigation";
 import { cn } from "@/lib/utils";
 
@@ -86,8 +88,11 @@ export function SiteHeader() {
     <header className={cn(styles.header, isScrolled && styles.scrolled)}>
       <div className={styles.inner}>
         <Link href="/" className={styles.lockup} aria-label="Jubilee Indane Home home">
-          <span className={styles.name}>Jubilee Indane Home</span>
-          <OfficialRelationship />
+          <Image src={jubileeLogo} alt="" className={styles.logo} priority />
+          <span className={styles.lockupText}>
+            <span className={styles.name}>Jubilee Indane Home</span>
+            <OfficialRelationship />
+          </span>
         </Link>
 
         <nav className={styles.desktopNav} aria-label="Primary">

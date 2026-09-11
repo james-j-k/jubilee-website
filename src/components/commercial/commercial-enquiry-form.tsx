@@ -63,7 +63,7 @@ export function CommercialEnquiryForm() {
         <span>Enquiry</span>
         <textarea name="enquiry" rows={5} required />
       </label>
-      <Button type="submit" variant="secondary">Continue in WhatsApp</Button>
+      <Button type="submit" variant="primary">Continue in WhatsApp</Button>
       <p className={styles.status} aria-live="polite">{status}</p>
     </form>
   );

@@ -1,98 +1,98 @@
 .section {
   position: relative;
   overflow: clip;
-  background: hsl(var(--background));
+  background: hsl(var(--color-navy));
+  color: hsl(var(--color-cream));
 }
 
 .heading {
-  margin-bottom: var(--space-7);
+  max-width: 48rem;
+  margin-bottom: var(--space-8);
+}
+
+.heading :global(h2) {
+  font-size: clamp(2.25rem, 6vw, 3.75rem);
+  color: hsl(var(--color-cream));
+}
+
+.heading :global(p:first-child) {
+  color: hsl(var(--accent));
+}
+
+.emphasis {
+  color: hsl(var(--accent));
 }
 
 .routes {
-  align-items: stretch;
-  gap: 0;
-  border: 1px solid hsl(var(--border));
-  border-radius: var(--radius-lg);
-  background: hsl(var(--surface));
-  overflow: hidden;
+  display: grid;
+  border: 6px solid hsl(var(--accent));
 }
 
 .domestic,
 .commercial {
   position: relative;
-  min-height: 19rem;
-  padding: var(--space-6) var(--space-5);
+  padding: var(--space-7) var(--space-6);
+}
+
+.domestic {
+  background: hsl(var(--color-cream));
+  color: hsl(var(--color-navy));
+  border-bottom: 6px solid hsl(var(--accent));
 }
 
 .commercial {
-  overflow: hidden;
-  background: hsl(var(--surface-subtle));
+  background: hsl(var(--color-navy));
+  color: hsl(var(--color-cream));
 }
 
 .label {
   margin: 0;
   color: hsl(var(--primary));
   font-size: var(--text-metadata);
-  font-weight: var(--font-weight-semibold);
+  font-weight: 800;
   letter-spacing: var(--tracking-metadata);
   line-height: var(--leading-metadata);
   text-transform: uppercase;
 }
 
+.commercial .label {
+  color: hsl(var(--accent));
+}
+
 .routes h3 {
-  max-width: 11ch;
-  margin: 0;
-  color: hsl(var(--foreground));
-  font-size: var(--text-h2);
-  font-weight: var(--font-weight-display);
-  letter-spacing: var(--tracking-display);
-  line-height: var(--leading-display);
-  text-wrap: balance;
+  max-width: 12ch;
+  margin: var(--space-4) 0 var(--space-5);
+  font-size: clamp(1.875rem, 4vw, 2.75rem);
 }
 
 .detail {
   max-width: 28rem;
-  margin: 0;
-  color: hsl(var(--muted-foreground));
-  font-size: var(--text-body);
+  margin: 0 0 var(--space-8);
+  font-size: var(--text-body-lg);
+  font-weight: 500;
   line-height: var(--leading-body);
+  opacity: 0.8;
 }
 
-.journey {
+.journeyBar {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  margin: var(--space-2) 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.journey li {
-  display: inline-flex;
   align-items: center;
-  color: hsl(var(--foreground));
-  font-size: var(--text-caption);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--leading-caption);
+  gap: var(--space-4);
+  font-weight: 800;
+  text-transform: uppercase;
 }
 
-.journey li:not(:last-child)::after {
-  width: var(--space-4);
-  margin-left: var(--space-2);
-  border-top: 1px solid hsl(var(--primary));
-  content: "";
-}
-
-.divider {
-  width: 100%;
-  margin: var(--space-2) 0 0;
+.journeyRule {
+  height: 0.5rem;
+  flex-grow: 1;
+  background: hsl(var(--accent));
 }
 
 .contexts {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2);
-  margin: 0;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-8);
   padding: 0;
   list-style: none;
 }
@@ -100,38 +100,16 @@
 .contexts li { display: flex; }
 
 .enquiry {
-  max-width: 28rem;
-  margin: var(--space-2) 0 0;
-  color: hsl(var(--foreground));
-  font-size: var(--text-caption);
-  font-weight: var(--font-weight-medium);
-  line-height: var(--leading-caption);
-}
-
-.contexts :global(span) {
-  border-color: hsl(var(--border));
-  background: hsl(var(--surface));
-  color: hsl(var(--foreground));
-}
-
-.terrain {
-  position: absolute;
-  right: -6%;
-  bottom: -1%;
-  left: -8%;
-  width: 114%;
-  color: hsl(var(--accent) / 0.34);
-}
-
-@media (min-width: 48rem) {
-  .domestic,
-  .commercial { padding: var(--space-7) var(--space-6); }
+  margin: 0;
+  color: hsl(var(--accent));
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 @media (min-width: 64rem) {
-  .heading { margin-bottom: var(--space-8); }
-  .routes { grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); }
-  .domestic,
-  .commercial { min-height: 29rem; padding: var(--space-8) var(--space-7); }
-  .commercial { border-left: 1px solid hsl(var(--border)); }
+  .heading { margin-bottom: var(--space-9); }
+  .routes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .domestic { border-bottom: 0; border-right: 6px solid hsl(var(--accent)); }
+  .domestic, .commercial { padding: var(--space-9); }
 }

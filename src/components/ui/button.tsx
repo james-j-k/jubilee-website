@@ -5,14 +5,14 @@ import { forwardRef, type ButtonHTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex min-h-11 items-center justify-center gap-2 rounded-pill px-5 text-button transition-[transform,box-shadow,background-color,border-color,color] duration-small ease-[var(--ease-standard)] focus-visible:outline-none disabled:pointer-events-none disabled:opacity-45 motion-hover-lift",
+  "inline-flex min-h-11 items-center justify-center gap-2 rounded-pill px-5 text-button font-black uppercase tracking-wide transition-transform duration-100 ease-[cubic-bezier(0.4,0,0.2,1)] focus-visible:outline-none disabled:pointer-events-none disabled:opacity-45 active:scale-[0.96]",
   {
     variants: {
       variant: {
-        primary: "bg-primary text-primary-foreground shadow-action hover:-translate-y-px hover:shadow-plaque",
-        secondary: "bg-surface text-foreground shadow-panel hover:-translate-y-px hover:shadow-plaque",
-        outline: "border border-border bg-transparent text-foreground hover:border-primary hover:bg-primary-soft",
-        ghost: "bg-transparent text-foreground hover:bg-surface-subtle",
+        primary: "btn-primary bg-accent text-primary-foreground",
+        secondary: "btn-secondary bg-action text-action-foreground",
+        outline: "btn-outline border-4 border-border bg-transparent text-foreground hover:bg-primary-soft",
+        ghost: "btn-ghost bg-transparent text-foreground hover:bg-surface-subtle",
       },
       size: {
         sm: "min-h-9 px-4 text-caption",

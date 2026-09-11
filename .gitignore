@@ -33,3 +33,4 @@ Thumbs.db
 # tooling
 *.tsbuildinfo
 .DS_Store
+.superdesign/tmp/

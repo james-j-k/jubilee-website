@@ -9,13 +9,19 @@
 .hero h1 { max-width: 12ch; margin: var(--space-3) 0 0; color: hsl(var(--foreground)); font-size: var(--text-display); font-weight: var(--font-weight-display); letter-spacing: var(--tracking-display); line-height: var(--leading-display); text-wrap: balance; }
 .intro { max-width: 38rem; margin: var(--space-5) 0 0; color: hsl(var(--muted-foreground)); font-size: var(--text-body-lg); line-height: var(--leading-body); }
 .heroActions, .directActions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-6); }
-.heroNote { padding: var(--space-6) var(--space-5); border: 1px solid hsl(var(--border)); border-radius: var(--radius-lg); background: hsl(var(--surface)); box-shadow: var(--shadow-panel); }
+.heroNote { padding: var(--space-6) var(--space-5); border: 4px solid hsl(var(--border)); background: hsl(var(--surface)); }
 .heroNote h2 { margin: var(--space-3) 0 0; color: hsl(var(--foreground)); font-size: var(--text-h3); font-weight: var(--font-weight-display); letter-spacing: var(--tracking-heading); line-height: var(--leading-heading); }
 .heroNote p:last-child { margin: var(--space-3) 0 0; color: hsl(var(--muted-foreground)); font-size: var(--text-body); line-height: var(--leading-body); }
 
 .section { position: relative; }
 .heading { margin-bottom: var(--space-7); }
 .panel { position: relative; overflow: hidden; }
+
+.servicesSection { background: hsl(var(--color-navy)); color: hsl(var(--color-cream)); }
+.servicesSection .heading :global(h2) { color: hsl(var(--color-cream)); }
+.servicesSection .eyebrow { color: hsl(var(--accent)); }
+.servicesSection :global(.text-muted-foreground) { color: hsl(var(--color-cream) / 0.7); }
+.servicesSection .panel { border-color: hsl(var(--accent)); background: hsl(var(--color-cream)); }
 .serviceList, .steps, .bookingMethods { display: grid; margin: 0; padding: 0; list-style: none; }
 .serviceList { gap: var(--space-5); }
 .serviceItem { display: grid; grid-template-columns: 2.5rem minmax(0, 1fr); gap: var(--space-3); }
@@ -37,8 +43,8 @@
 .faq summary::marker { color: hsl(var(--primary)); }
 .faq p { max-width: 42rem; margin: 0; padding: 0 var(--space-4) var(--space-5); color: hsl(var(--muted-foreground)); font-size: var(--text-body); line-height: var(--leading-body); }
 
-.contact { background: hsl(var(--surface-subtle)); }
-.contactPanel { display: grid; gap: var(--space-6); padding: var(--space-6) var(--space-5); border: 1px solid hsl(var(--border)); border-radius: var(--radius-lg); background: hsl(var(--surface)); box-shadow: var(--shadow-panel); }
+.contact { background: hsl(var(--color-navy)); }
+.contactPanel { display: grid; gap: var(--space-6); padding: var(--space-6) var(--space-5); border: 6px solid hsl(var(--accent)); background: hsl(var(--color-cream)); color: hsl(var(--color-navy)); }
 .contactCopy { max-width: 40rem; }
 .contactCopy h2 { margin: var(--space-3) 0 0; color: hsl(var(--foreground)); font-size: var(--text-h2); font-weight: var(--font-weight-display); letter-spacing: var(--tracking-display); line-height: var(--leading-display); text-wrap: balance; }
 .contactCopy > p:last-of-type { margin: var(--space-4) 0 0; color: hsl(var(--muted-foreground)); font-size: var(--text-body); line-height: var(--leading-body); }
