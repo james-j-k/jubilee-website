@@ -12,17 +12,20 @@
 <meta property="og:image" content="https://jubilee-website-one.vercel.app/assets/img/team.jpg">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="assets/logo/favicon.png">
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/Archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/Chilanka-malayalam-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/style.css?v=7">
+<link rel="stylesheet" href="css/style.css?v=8">
+<script>/* apply saved language before first paint */
+try{if(localStorage.getItem("jubilee.lang")==="ml")document.documentElement.lang="ml"}catch(e){}</script>
 <script>/* Vercel Web Analytics: cookie-free, aggregate counts; skipped on local previews */
 if(!/^(localhost|127\.|\[::1\])/.test(location.hostname)){window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};var va=document.createElement("script");va.defer=true;va.src="/_vercel/insights/script.js";document.head.appendChild(va);}</script>
 </head>
 <body>
 
-<a class="skip" href="#main">Skip to content</a>
+<a class="skip" href="#main" data-i18n="ui.skip">Skip to content</a>
 
 <!-- shared SVG paint servers (cylinders, seal) -->
 <svg class="defs" aria-hidden="true" focusable="false">
@@ -46,17 +49,50 @@ if(!/^(localhost|127\.|\[::1\])/.test(location.hostname)){window.va=window.va||f
     <img class="brand-wm" src="assets/logo/jubilee-wordmark.webp" alt="" width="360" height="240">
   </a>
   <ul class="nav-links">
-    <li><a href="#route">The route</a></li>
-    <li><a href="#refill">Refill planner</a></li>
-    <li><a href="#cylinders">Cylinders</a></li>
-    <li><a href="#jubilee">25 years</a></li>
-    <li><a href="#safety">Safety</a></li>
+    <li><a href="#refill" data-i18n="nav.refill">Refill planner</a></li>
+    <li><a href="#cylinders" data-i18n="nav.cyl">Cylinders</a></li>
+    <li><a href="#jubilee" data-i18n="nav.jub">25 years</a></li>
+    <li><a href="#safety" class="nav-gas"><i aria-hidden="true"></i><span data-i18n="nav.gas">Gas safety</span></a></li>
   </ul>
-  <a class="btn btn-ink btn-sm nav-call" href="tel:+919447071889">
-    <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z"/></svg>
-    <span class="hide-sm">94470 71889</span><span class="show-sm">Call</span>
-  </a>
+  <div class="nav-actions">
+    <button type="button" class="lang-btn" data-lang-toggle></button>
+    <a class="btn btn-ink btn-sm nav-call" href="tel:+919447071889">
+      <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z"/></svg>
+      <span class="hide-sm">94470 71889</span><span class="show-sm" data-i18n="nav.call">Call</span>
+    </a>
+    <button type="button" class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menu">
+      <span class="bars" aria-hidden="true"><i></i><i></i></span><span class="visually-hidden" data-i18n="nav.menu">Menu</span>
+    </button>
+  </div>
 </nav>
+
+<!-- phone / tablet menu -->
+<div class="menu" id="menu" hidden>
+  <div class="menu-inner">
+    <div class="menu-gas">
+      <a href="#safety" class="mg-link"><b data-i18n="menu.gas">Smell gas? Get help now</b><span data-i18n="menu.gasSub">Safety steps and the 1906 helpline</span></a>
+      <a href="tel:1906" class="mg-call" data-i18n="menu.call1906">Call 1906</a>
+    </div>
+    <ul class="menu-links">
+      <li><a href="#route" data-i18n="menu.route">The delivery route</a></li>
+      <li><a href="#refill" data-i18n="nav.refill">Refill planner</a></li>
+      <li><a href="#cylinders" data-i18n="nav.cyl">Cylinders</a></li>
+      <li><a href="#jubilee" data-i18n="menu.jub">Silver jubilee</a></li>
+      <li><a href="#contact" data-i18n="menu.contact">Contact</a></li>
+    </ul>
+    <div class="menu-lang">
+      <span data-i18n="menu.lang">Language</span>
+      <div class="seg" role="group" aria-label="Language">
+        <button type="button" data-set-lang="en" lang="en">English</button>
+        <button type="button" data-set-lang="ml" lang="ml">മലയാളം</button>
+      </div>
+    </div>
+    <div class="menu-cta">
+      <a class="btn btn-ink" href="tel:+919447071889"><span data-i18n="menu.call">Call 94470 71889</span></a>
+      <a class="btn btn-ghost" href="https://wa.me/919447071889" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
+  </div>
+</div>
 
 <main id="main">
 
@@ -64,22 +100,23 @@ if(!/^(localhost|127\.|\[::1\])/.test(location.hostname)){window.va=window.va||f
 <header class="hero" id="top">
   <svg class="hero-map" id="heroMap" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
 
-  <a class="seal-link hero-seal" href="#jubilee" aria-label="Silver jubilee: 25 years, 2001 to 2026. Read more.">
+  <a class="seal-link hero-seal" href="#jubilee" aria-label="Silver jubilee: 25 years, 2001 to 2026. Read more." data-i18n-aria="hero.sealAria">
     <span class="seal" data-seal></span>
   </a>
 
   <div class="hero-inner">
-    <div class="coords mono"><span>Pala, Kottayam</span><span class="tagline">Safe. Reliable. Convenient.</span></div>
+    <div class="coords mono"><span data-i18n="hero.place">Pala, Kottayam</span><span class="tagline">Safe. Reliable. Convenient.</span></div>
     <p class="ml hero-ml" lang="ml">പാലായുടെ സ്വന്തം ഗ്യാസ് ഏജൻസി</p>
-    <h1><span class="h1a">From the town square</span> <em>to the top of the hill.</em></h1>
-    <p class="lede">Jubilee Indane Home has delivered Indane LPG across Pala since 2001, <strong>planned route by route</strong> for about 14,500 homes and 600 businesses.</p>
+    <h1 data-i18n-html="hero.h1"><span class="h1a">From the town square</span> <em>to the top of the hill.</em></h1>
+    <p class="lede" data-i18n-html="hero.lede">Jubilee Indane Home has delivered Indane LPG across Pala since 2001, <strong>planned route by route</strong> for about 14,500 homes and 600 businesses.</p>
     <div class="cta-row">
-      <a class="btn btn-ink" href="#refill">Plan your next refill <span class="arr" aria-hidden="true">→</span></a>
-      <a class="btn btn-ghost" href="https://wa.me/919447071889" target="_blank" rel="noopener">Message on WhatsApp</a>
+      <a class="btn btn-ink" href="#refill"><span data-i18n="hero.cta1">Plan your next refill</span> <span class="arr" aria-hidden="true">→</span></a>
+      <a class="btn btn-ghost" href="https://wa.me/919447071889" target="_blank" rel="noopener" data-i18n="hero.cta2">Message on WhatsApp</a>
     </div>
     <div class="authorised">
       <img src="assets/logo/indianoil.webp" alt="IndianOil" width="200" height="200">
-      <span>Authorised distributor<br><b>IndianOil Corporation Ltd.</b></span>
+      <span data-i18n-html="hero.auth">Authorised distributor<br><b>IndianOil Corporation Ltd.</b></span>
+      <button type="button" class="lang-link" data-lang-toggle></button>
     </div>
   </div>
 </header>
@@ -97,33 +134,36 @@ if(!/^(localhost|127\.|\[::1\])/.test(location.hostname)){window.va=window.va||f
       </svg>
     </div>
     <div class="route-copy">
-      <div class="kicker mono">One day on the route</div>
+      <div class="route-top">
+        <div class="kicker mono" data-i18n="route.kicker">One day on the route</div>
+        <a class="route-skip" href="#refill"><span data-i18n="route.skip">Skip</span> <span aria-hidden="true">→</span></a>
+      </div>
       <p class="ml route-ml" lang="ml">ഓരോ വഴിയും ഞങ്ങൾക്കറിയാം</p>
-      <h2 class="route-title">Pala isn’t flat. Our planning isn’t either.</h2>
+      <h2 class="route-title" data-i18n="route.title">Pala isn’t flat. Our planning isn’t either.</h2>
       <div class="stops">
         <article class="stop on" data-at="0">
-          <div class="num mono">Stop 1 of 4 · Godown</div>
-          <h3>It starts at the godown.</h3>
-          <p>Cylinders are loaded by route, not by the order they came in. Each vehicle leaves knowing which roads it will cover.</p>
-          <div class="fact"><b>8</b><span>delivery vehicles<br>on the day’s routes</span></div>
+          <div class="num mono" data-i18n="route.s1n">Stop 1 of 4 · Godown</div>
+          <h3 data-i18n="route.s1h">It starts at the godown.</h3>
+          <p data-i18n="route.s1p">Cylinders are loaded by route, not by the order they came in. Each vehicle leaves knowing which roads it will cover.</p>
+          <div class="fact"><b>8</b><span data-i18n-html="route.s1f">delivery vehicles<br>on the day’s routes</span></div>
         </article>
         <article class="stop" data-at=".26">
-          <div class="num mono">Stop 2 of 4 · Town centre</div>
-          <h3>Kitchens that can’t pause.</h3>
-          <p>Hotels, bakeries, caterers, tea shops, hospitals, hostels and schools around town. Commercial LPG runs alongside the domestic routes.</p>
-          <div class="fact"><b>~600</b><span>commercial customers</span></div>
+          <div class="num mono" data-i18n="route.s2n">Stop 2 of 4 · Town centre</div>
+          <h3 data-i18n="route.s2h">Kitchens that can’t pause.</h3>
+          <p data-i18n="route.s2p">Hotels, bakeries, caterers, tea shops, hospitals, hostels and schools around town. Commercial LPG runs alongside the domestic routes.</p>
+          <div class="fact"><b>~600</b><span data-i18n="route.s2f">commercial customers</span></div>
         </article>
         <article class="stop" data-at=".52">
-          <div class="num mono">Stop 3 of 4 · Neighbourhoods</div>
-          <h3>Street by street, house by house.</h3>
-          <p>Most of the day is homes. The delivery staff know these lanes, the landmarks and the gates.</p>
-          <div class="fact"><b>~14,500</b><span>domestic customers</span></div>
+          <div class="num mono" data-i18n="route.s3n">Stop 3 of 4 · Neighbourhoods</div>
+          <h3 data-i18n="route.s3h">Street by street, house by house.</h3>
+          <p data-i18n="route.s3p">Most of the day is homes. The delivery staff know these lanes, the landmarks and the gates.</p>
+          <div class="fact"><b>~14,500</b><span data-i18n="route.s3f">domestic customers</span></div>
         </article>
         <article class="stop" data-at=".78">
-          <div class="num mono">Stop 4 of 4 · Hill roads</div>
-          <h3>Then the climb.</h3>
-          <p>Rural routes into the hills take longer and are planned separately, so they aren’t treated like just another town street.</p>
-          <div class="fact"><b>8</b><span>delivery staff who<br>know the way</span></div>
+          <div class="num mono" data-i18n="route.s4n">Stop 4 of 4 · Hill roads</div>
+          <h3 data-i18n="route.s4h">Then the climb.</h3>
+          <p data-i18n="route.s4p">Rural routes into the hills take longer and are planned separately, so they aren’t treated like just another town street.</p>
+          <div class="fact"><b>8</b><span data-i18n-html="route.s4f">delivery staff who<br>know the way</span></div>
         </article>
       </div>
       <div class="progress" aria-hidden="true"><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></div>
@@ -136,19 +176,19 @@ if(!/^(localhost|127\.|\[::1\])/.test(location.hostname)){window.va=window.va||f
   <div class="sec-head reveal">
     <div>
       <p class="ml sec-ml" lang="ml">ഗ്യാസ് തീരും മുമ്പേ ബുക്ക് ചെയ്യൂ</p>
-      <h2 id="refillTitle">Never run out mid&#8209;meal.</h2>
+      <h2 id="refillTitle" data-i18n="pl.title">Never run out mid&#8209;meal.</h2>
     </div>
-    <p>Pick your cylinder, tell us when it was connected, and we’ll estimate what’s left and when to book.</p>
+    <p data-i18n="pl.intro">Pick your cylinder, tell us when it was connected, and we’ll estimate what’s left and when to book.</p>
   </div>
 
   <div class="planner reveal">
     <div class="gauge-card">
       <div class="sizes" role="radiogroup" aria-label="Cylinder size" id="sizes"></div>
-      <div class="gauge-stage">
+      <div class="gauge-stage" id="gaugeStage">
         <div class="gauge-art" id="gaugeArt" aria-hidden="true"></div>
         <div class="readout">
-          <b><span id="pct">0</span><small>%</small></b>
-          <span class="mono">Estimated gas left</span>
+          <b><span id="pct">–</span><small>%</small></b>
+          <span class="mono" data-i18n="pl.left">Estimated gas left</span>
           <span class="spec" id="specKg"></span>
         </div>
       </div>
@@ -156,19 +196,27 @@ if(!/^(localhost|127\.|\[::1\])/.test(location.hostname)){window.va=window.va||f
 
     <div class="plan-form">
       <div class="field">
-        <label for="last">Cylinder connected on</label>
+        <label for="last" data-i18n="pl.lastLabel">Cylinder connected on</label>
         <input type="date" id="last">
+        <div class="chips" id="quickDates">
+          <button type="button" data-days="0" data-i18n="pl.today">Today</button>
+          <button type="button" data-days="7" data-i18n="pl.w1">1 week ago</button>
+          <button type="button" data-days="14" data-i18n="pl.w2">2 weeks ago</button>
+          <button type="button" data-days="30" data-i18n="pl.m1">1 month ago</button>
+        </div>
       </div>
       <div class="field">
-        <div class="field-top"><label for="weeks">One cylinder usually lasts</label><output id="weeksOut" for="weeks">6 weeks</output></div>
+        <div class="field-top"><label for="weeks" data-i18n="pl.weeksLabel">One cylinder usually lasts</label><output id="weeksOut" for="weeks">6 weeks</output></div>
         <input class="range" type="range" id="weeks" min="1" max="12" step="1" value="6">
-        <div class="chips" id="chips">
-          <span class="chips-label">Not sure? People at home:</span>
-          <button type="button" data-people="2">1–2</button>
-          <button type="button" data-people="4">3–4</button>
-          <button type="button" data-people="6">5–6</button>
-          <button type="button" data-people="8">7+</button>
-        </div>
+        <details class="more" id="unsure">
+          <summary data-i18n="pl.unsure">Not sure? Estimate from people at home</summary>
+          <div class="chips" id="chips">
+            <button type="button" data-people="2">1–2</button>
+            <button type="button" data-people="4">3–4</button>
+            <button type="button" data-people="6">5–6</button>
+            <button type="button" data-people="8">7+</button>
+          </div>
+        </details>
       </div>
 
       <div class="result" aria-live="polite">
@@ -179,22 +227,37 @@ if(!/^(localhost|127\.|\[::1\])/.test(location.hostname)){window.va=window.va||f
         <div class="result-actions">
           <a class="book" id="bookBtn" href="https://wa.me/919447071889" target="_blank" rel="noopener">
             <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.2 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-3.3-.8-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.3 0 .5l-.3.5-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg>
-            Book on WhatsApp
+            <span data-i18n="pl.book">Book on WhatsApp</span>
           </a>
           <button type="button" class="remind" id="remindBtn">
             <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2zm12 8v10H5V10z"/></svg>
-            Add a reminder
+            <span data-i18n="pl.remind">Add a reminder</span>
           </button>
         </div>
+        <details class="more on-dark" id="consumerBox">
+          <summary data-i18n="pl.consumerSum">Add your consumer number to the booking</summary>
+          <label class="visually-hidden" for="consumer" data-i18n="pl.consumerLabel">Consumer number</label>
+          <input type="text" id="consumer" inputmode="numeric" autocomplete="off" maxlength="20" placeholder="e.g. 1234567" data-i18n-ph="pl.consumerPh">
+          <p class="hint" data-i18n="pl.consumerHint">Saved only on this device.</p>
+        </details>
       </div>
 
-      <div class="timeline" aria-hidden="true">
+      <div class="timeline" id="timeline" aria-hidden="true">
         <div class="tl-track"><i id="tlFill"></i></div>
-        <div class="tl-mk today" id="mkToday"><span class="mono">Today</span><i></i></div>
-        <div class="tl-mk bookby" id="mkBook"><i></i><span class="mono">Book by</span></div>
+        <div class="tl-mk today" id="mkToday"><span class="mono" data-i18n="pl.tlToday">Today</span><i></i></div>
+        <div class="tl-mk bookby" id="mkBook"><i></i><span class="mono" data-i18n="pl.tlBook">Book by</span></div>
       </div>
-      <div class="tl-dates"><span>Connected <b id="tlStart"></b></span><span>Runs out <b id="tlEnd"></b></span></div>
-      <p class="fine">An estimate from your own usage, not a meter reading. You can also book through IndianOil’s official refill channels.</p>
+      <div class="tl-dates" id="tlDates"><span><span data-i18n="pl.tlStart">Connected</span> <b id="tlStart"></b></span><span><span data-i18n="pl.tlEnd">Runs out</span> <b id="tlEnd"></b></span></div>
+
+      <div class="saved" id="savedRow" hidden>
+        <span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg><span data-i18n="pl.saved">Saved on this device.</span></span>
+        <button type="button" id="forgetBtn" data-i18n="pl.forget">Forget my details</button>
+      </div>
+      <p class="fine" data-i18n="pl.fine">An estimate from your own usage, not a meter reading. You can also book through IndianOil’s official refill channels.</p>
+      <button type="button" class="install" id="installBtn" hidden>
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v10.2l3.6-3.6L17 11l-5 5-5-5 1.4-1.4 3.6 3.6V3zM5 19h14v2H5z"/></svg>
+        <span data-i18n="pl.install">Add Jubilee to your home screen</span>
+      </button>
     </div>
   </div>
 </section>
@@ -204,9 +267,9 @@ if(!/^(localhost|127\.|\[::1\])/.test(location.hostname)){window.va=window.va||f
   <div class="sec-head reveal">
     <div>
       <p class="ml sec-ml" lang="ml">നിങ്ങൾക്ക് പറ്റിയ സിലിണ്ടർ</p>
-      <h2 id="cylTitle">Every size, from one office.</h2>
+      <h2 id="cylTitle" data-i18n="cy.title">Every size, from one office.</h2>
     </div>
-    <p>From a compact 5 kg to a 19 kg for a busy commercial kitchen. Tap a cylinder to see who it’s for.</p>
+    <p data-i18n="cy.intro">From a compact 5 kg to a 19 kg for a busy commercial kitchen. Tap a cylinder to see who it’s for.</p>
   </div>
   <div class="lineup reveal">
     <div class="shelf" role="tablist" aria-label="Cylinder sizes" id="shelf"></div>
@@ -221,38 +284,48 @@ if(!/^(localhost|127\.|\[::1\])/.test(location.hostname)){window.va=window.va||f
       <span class="seal seal-lg" data-seal data-tilt></span>
     </div>
     <div class="jub-copy reveal">
-      <div class="mono jub-kicker">Silver jubilee · October 2026</div>
-      <h2 id="jubTitle">Twenty-five years of Pala’s kitchens.</h2>
+      <div class="mono jub-kicker" id="jubKicker">Silver jubilee · October 2026</div>
+      <h2 id="jubTitle" data-i18n="jub.title">Twenty-five years of Pala’s kitchens.</h2>
       <p class="ml jub-ml" lang="ml">25 വർഷം. ഞങ്ങളോടൊപ്പം നിന്നതിന് നന്ദി!</p>
-      <p class="jub-lede">This October, Jubilee Indane Home turns 25. Gigi James opened the office in 2001. Since then it has grown to about 14,500 homes and 600 businesses. Thank you to every family, shop and kitchen that has cooked with us.</p>
+      <p class="jub-lede" id="jubLede">This October, Jubilee Indane Home turns 25. Gigi James opened the office in 2001. Since then it has grown to about 14,500 homes and 600 businesses. Thank you to every family, shop and kitchen that has cooked with us.</p>
     </div>
   </div>
 
   <ol class="years reveal" aria-label="From 2001 to 2026">
-    <li><b>2001</b><span>Gigi James opens Jubilee Indane Home in Pala.</span></li>
-    <li><b>The office</b><span>Municipal Commercial Complex, open Monday to Saturday.</span></li>
-    <li><b>The route</b><span>8 vehicles and 8 delivery staff across town and hill roads.</span></li>
-    <li><b>2026</b><span>~14,500 homes and ~600 businesses. Twenty-five years.</span></li>
+    <li><b>2001</b><span data-i18n="jub.y1">Gigi James opens Jubilee Indane Home in Pala.</span></li>
+    <li><b data-i18n="jub.y2h">The office</b><span data-i18n="jub.y2">Municipal Commercial Complex, open Monday to Saturday.</span></li>
+    <li><b data-i18n="jub.y3h">The route</b><span data-i18n="jub.y3">8 vehicles and 8 delivery staff across town and hill roads.</span></li>
+    <li><b>2026</b><span data-i18n="jub.y4">~14,500 homes and ~600 businesses. Twenty-five years.</span></li>
   </ol>
 
-  <div class="jub-photos">
-    <figure class="reveal"><img src="assets/img/team.webp" width="960" height="432" alt="The Jubilee Indane Home team at the Pala office" loading="lazy"><figcaption class="mono">The Jubilee team</figcaption></figure>
-    <figure class="reveal"><img src="assets/img/customers-office.webp" width="1600" height="900" alt="Gigi James handing a gift to a customer at the Jubilee office" loading="lazy"><figcaption class="mono">At the office</figcaption></figure>
-    <figure class="reveal"><img src="assets/img/customer-home.webp" width="1280" height="720" alt="The Jubilee team visiting a customer family at home" loading="lazy"><figcaption class="mono">Visiting a customer</figcaption></figure>
+  <div class="jub-photos" id="jubPhotos">
+    <figure class="reveal"><button type="button" class="ph" data-index="0"><img src="assets/img/team.webp" width="960" height="432" alt="The Jubilee Indane Home team at the Pala office" loading="lazy"></button><figcaption class="mono" data-i18n="jub.c1">The Jubilee team</figcaption></figure>
+    <figure class="reveal"><button type="button" class="ph" data-index="1"><img src="assets/img/customers-office.webp" width="1600" height="900" alt="Gigi James handing a gift to a customer at the Jubilee office" loading="lazy"></button><figcaption class="mono" data-i18n="jub.c2">At the office</figcaption></figure>
+    <figure class="reveal"><button type="button" class="ph" data-index="2"><img src="assets/img/customer-home.webp" width="1280" height="720" alt="The Jubilee team visiting a customer family at home" loading="lazy"></button><figcaption class="mono" data-i18n="jub.c3">Visiting a customer</figcaption></figure>
+  </div>
+
+  <div class="thanks" id="thanks" hidden>
+    <h3 data-i18n="jub.thanksTitle">Thank-you notes</h3>
+    <div class="thanks-grid" id="thanksGrid"></div>
+  </div>
+
+  <div class="jub-invite reveal">
+    <p data-i18n="jub.invite">Been with us for years? Share a memory or a photo, and we may feature it here for the jubilee.</p>
+    <a class="btn btn-silver" id="memoryBtn" href="https://wa.me/919447071889" target="_blank" rel="noopener" data-i18n="jub.inviteBtn">Share a memory on WhatsApp</a>
   </div>
 </section>
 
 <!-- ============ ROUTE LOG ============ -->
 <section class="pad log" id="log" aria-labelledby="logTitle">
   <div class="sec-head reveal">
-    <h2 id="logTitle">The route log.</h2>
-    <p>The numbers behind a normal working day at Jubilee.</p>
+    <h2 id="logTitle" data-i18n="log.title">The route log.</h2>
+    <p data-i18n="log.intro">The numbers behind a normal working day at Jubilee.</p>
   </div>
   <div class="ledger">
-    <div class="row reveal"><span class="code mono">Since</span><span class="val" data-count="2001" data-plain>2001</span><div class="desc"><b>Founded by Gigi James</b><span>Twenty-five years supplying Pala, celebrated this October.</span></div></div>
-    <div class="row reveal"><span class="code mono">Homes</span><span class="val"><small>approx.</small><span data-count="14500">14,500</span></span><div class="desc"><b>Domestic customers</b><span>Most of each day’s deliveries go to household kitchens.</span></div></div>
-    <div class="row reveal"><span class="code mono">Business</span><span class="val"><small>approx.</small><span data-count="600">600</span></span><div class="desc"><b>Commercial customers</b><span>Hotels, restaurants, bakeries, caterers, schools, hospitals, hostels and tea shops.</span></div></div>
-    <div class="row reveal"><span class="code mono">Fleet</span><span class="val">8 + 8</span><div class="desc"><b>Vehicles and delivery staff</b><span>Assigned to routes that cover both the town and the hill roads.</span></div></div>
+    <div class="row reveal"><span class="code mono" data-i18n="log.c1">Since</span><span class="val" data-count="2001" data-plain>2001</span><div class="desc"><b data-i18n="log.h1">Founded by Gigi James</b><span data-i18n="log.p1">Twenty-five years supplying Pala.</span></div></div>
+    <div class="row reveal"><span class="code mono" data-i18n="log.c2">Homes</span><span class="val"><small data-i18n="log.approx">approx.</small><span data-count="14500">14,500</span></span><div class="desc"><b data-i18n="log.h2">Domestic customers</b><span data-i18n="log.p2">Most of each day’s deliveries go to household kitchens.</span></div></div>
+    <div class="row reveal"><span class="code mono" data-i18n="log.c3">Business</span><span class="val"><small data-i18n="log.approx">approx.</small><span data-count="600">600</span></span><div class="desc"><b data-i18n="log.h3">Commercial customers</b><span data-i18n="log.p3">Hotels, restaurants, bakeries, caterers, schools, hospitals, hostels and tea shops.</span></div></div>
+    <div class="row reveal"><span class="code mono" data-i18n="log.c4">Fleet</span><span class="val">8 + 8</span><div class="desc"><b data-i18n="log.h4">Vehicles and delivery staff</b><span data-i18n="log.p4">Assigned to routes that cover both the town and the hill roads.</span></div></div>
   </div>
 </section>
 
@@ -261,27 +334,27 @@ if(!/^(localhost|127\.|\[::1\])/.test(location.hostname)){window.va=window.va||f
   <div class="sec-head reveal">
     <div>
       <p class="ml sec-ml" lang="ml">ഗ്യാസ് മണം വന്നാൽ</p>
-      <h2 id="safetyTitle">Smell gas? Do this now.</h2>
+      <h2 id="safetyTitle" data-i18n="sf.title">Smell gas? Do this now.</h2>
     </div>
-    <p>Work down the list. Tick each step as you go, then call from somewhere safe.</p>
+    <p data-i18n="sf.intro">Work down the list. Tick each step as you go, then call from somewhere safe.</p>
   </div>
   <div class="safety-wrap">
     <aside class="helpline reveal">
-      <div class="mono">IndianOil LPG emergency helpline</div>
+      <div class="mono" data-i18n="sf.helpline">IndianOil LPG emergency helpline</div>
       <b>1906</b>
-      <p>Call from outside, once you’ve done the steps. Jubilee: 94470 71889.</p>
-      <a href="tel:1906">Call 1906</a>
+      <p data-i18n="sf.helpText">Call from outside, once you’ve done the steps. Jubilee: 94470 71889.</p>
+      <a href="tel:1906" data-i18n="sf.call">Call 1906</a>
     </aside>
     <div class="reveal">
       <div class="check-progress" aria-hidden="true"><i id="checkBar"></i></div>
       <ul class="check" id="check">
-        <li><label><input type="checkbox"><span><strong>Turn the regulator off</strong><em>Turn the pressure-regulator knob on the cylinder to OFF.</em></span></label></li>
-        <li><label><input type="checkbox"><span><strong>No flames, no switches</strong><em>No matches or lighters. Don’t switch electrical things on or off nearby.</em></span></label></li>
-        <li><label><input type="checkbox"><span><strong>Open doors and windows</strong><em>Let fresh air in and the gas out.</em></span></label></li>
-        <li><label><input type="checkbox"><span><strong>Call from a safe place</strong><em>Ring 1906 or Jubilee from outside the house.</em></span></label></li>
+        <li><label><input type="checkbox"><span><strong data-i18n="sf.s1h">Turn the regulator off</strong><em data-i18n="sf.s1p">Turn the pressure-regulator knob on the cylinder to OFF.</em></span></label></li>
+        <li><label><input type="checkbox"><span><strong data-i18n="sf.s2h">No flames, no switches</strong><em data-i18n="sf.s2p">No matches or lighters. Don’t switch electrical things on or off nearby.</em></span></label></li>
+        <li><label><input type="checkbox"><span><strong data-i18n="sf.s3h">Open doors and windows</strong><em data-i18n="sf.s3p">Let fresh air in and the gas out.</em></span></label></li>
+        <li><label><input type="checkbox"><span><strong data-i18n="sf.s4h">Call from a safe place</strong><em data-i18n="sf.s4p">Ring 1906 or Jubilee from outside the house.</em></span></label></li>
       </ul>
       <div class="done mono" id="done" aria-live="polite">0 of 4 done</div>
-      <small class="src">Based on IndianOil’s published domestic LPG guidance. Full details: <a href="https://iocl.com/pages/faq" target="_blank" rel="noopener">IndianOil LPG FAQ</a>.</small>
+      <small class="src" data-i18n-html="sf.src">Based on IndianOil’s published domestic LPG guidance. Full details: <a href="https://iocl.com/pages/faq" target="_blank" rel="noopener">IndianOil LPG FAQ</a>.</small>
     </div>
   </div>
 </section>
@@ -291,13 +364,13 @@ if(!/^(localhost|127\.|\[::1\])/.test(location.hostname)){window.va=window.va||f
   <div class="about-grid">
     <figure class="portrait reveal"><img src="assets/img/owner.webp" width="354" height="472" alt="Gigi James, founder of Jubilee Indane Home" loading="lazy"><figcaption class="mono">Gigi James · Founder</figcaption></figure>
     <div class="reveal">
-      <div class="mono accent">Since 2001</div>
-      <h2 id="aboutTitle" class="visually-hidden">About Jubilee</h2>
-      <blockquote>Gigi James started Jubilee in 2001. Twenty-five years later it’s still <em>a Pala business</em>, run from the Municipal Commercial Complex, with the same focus on getting it right.</blockquote>
+      <div class="mono accent" data-i18n="ab.since">Since 2001</div>
+      <h2 id="aboutTitle" class="visually-hidden" data-i18n="ab.title">About Jubilee</h2>
+      <blockquote data-i18n-html="ab.quote">Gigi James started Jubilee in 2001. Twenty-five years later it’s still <em>a Pala business</em>, run from the Municipal Commercial Complex, with the same focus on getting it right.</blockquote>
       <div class="meta">
-        <div><b>25</b><span>years in Pala</span></div>
-        <div><b>1</b><span>office, walk in any working day</span></div>
-        <div><b>6</b><span>days a week</span></div>
+        <div><b>25</b><span data-i18n="ab.m1">years in Pala</span></div>
+        <div><b>1</b><span data-i18n="ab.m2">office, walk in any working day</span></div>
+        <div><b>6</b><span data-i18n="ab.m3">days a week</span></div>
       </div>
     </div>
   </div>
@@ -311,10 +384,10 @@ if(!/^(localhost|127\.|\[::1\])/.test(location.hostname)){window.va=window.va||f
   </div>
   <h2 id="contactTitle"><a href="tel:+919447071889">+91 94470 71889</a></h2>
   <div class="cgrid">
-    <div class="ccard"><h3 class="mono">Office</h3><p>Plot No 6217, Municipal Commercial Complex, Pala, Kerala 686575</p><a class="clink" href="https://maps.app.goo.gl/JtuemzYfFTmd3Qoj8" target="_blank" rel="noopener">Directions ↗</a></div>
-    <div class="ccard"><h3 class="mono">Hours</h3><p>Monday to Saturday<br>9:00 AM – 5:00 PM</p></div>
-    <div class="ccard"><h3 class="mono">Write</h3><p><a href="mailto:jubileeindanehome@gmail.com">jubileeindanehome@gmail.com</a></p><a class="clink" href="https://wa.me/919447071889" target="_blank" rel="noopener">WhatsApp ↗</a></div>
-    <div class="ccard"><h3 class="mono">Godown</h3><p>LPG storage for the Pala routes</p><a class="clink" href="https://maps.app.goo.gl/q4JmcG9Swb8j3uTK9" target="_blank" rel="noopener">View on Maps ↗</a></div>
+    <div class="ccard"><h3 class="mono" data-i18n="ct.office">Office</h3><p>Plot No 6217, Municipal Commercial Complex, Pala, Kerala 686575</p><a class="clink" href="https://maps.app.goo.gl/JtuemzYfFTmd3Qoj8" target="_blank" rel="noopener" data-i18n="ct.dir">Directions ↗</a></div>
+    <div class="ccard"><h3 class="mono" data-i18n="ct.hours">Hours</h3><p data-i18n-html="ct.hoursText">Monday to Saturday<br>9:00 AM – 5:00 PM</p><p class="ccard-note" data-i18n="ct.holiday">Hours may differ on public holidays.</p></div>
+    <div class="ccard"><h3 class="mono" data-i18n="ct.write">Write</h3><p><a href="mailto:jubileeindanehome@gmail.com">jubileeindanehome@gmail.com</a></p><a class="clink" href="https://wa.me/919447071889" target="_blank" rel="noopener" data-i18n="ct.wa">WhatsApp ↗</a></div>
+    <div class="ccard"><h3 class="mono" data-i18n="ct.godown">Godown</h3><p data-i18n="ct.godownText">LPG storage for the Pala routes</p><a class="clink" href="https://maps.app.goo.gl/q4JmcG9Swb8j3uTK9" target="_blank" rel="noopener" data-i18n="ct.map">View on Maps ↗</a></div>
   </div>
 </section>
 
@@ -328,21 +401,67 @@ if(!/^(localhost|127\.|\[::1\])/.test(location.hostname)){window.va=window.va||f
   </div>
   <p class="foot-tag">Safe. Reliable. Convenient.</p>
   <nav class="foot-links" aria-label="Footer">
-    <a href="#refill">Refill planner</a><a href="#cylinders">Cylinders</a><a href="#jubilee">25 years</a><a href="#safety">Gas safety</a><a href="#contact">Contact</a>
+    <a href="#refill" data-i18n="nav.refill">Refill planner</a><a href="#cylinders" data-i18n="nav.cyl">Cylinders</a><a href="#jubilee" data-i18n="nav.jub">25 years</a><a href="#safety" data-i18n="nav.gas">Gas safety</a><a href="#contact" data-i18n="menu.contact">Contact</a>
+    <button type="button" class="foot-lang" data-lang-toggle></button>
   </nav>
   <div class="foot-bottom">
-    <span>© 2026 Jubilee Indane Home · Authorised distributor, IndianOil Corporation Ltd.</span>
-    <span><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · LPG emergency <a href="tel:1906">1906</a></span>
+    <span data-i18n="ft.copy">© 2026 Jubilee Indane Home · Authorised distributor, IndianOil Corporation Ltd.</span>
+    <span><a href="privacy.html" data-i18n="ft.privacy">Privacy</a> · <a href="terms.html" data-i18n="ft.terms">Terms</a> · <span data-i18n="ft.emergency">LPG emergency</span> <a href="tel:1906">1906</a></span>
   </div>
 </footer>
 
-<div class="action-bar" id="actionBar" aria-label="Quick actions">
-  <a href="tel:+919447071889"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z"/></svg>Call</a>
-  <a href="https://wa.me/919447071889" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.2 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-3.3-.8-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.3 0 .5l-.3.5-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg>WhatsApp</a>
-  <a class="primary" href="#refill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 2h6v3h-1v1.1A7 7 0 0 1 19 13v6a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3v-6a7 7 0 0 1 5-6.9V5H9z"/></svg>Refill</a>
-</div>
+<!-- business enquiry -->
+<dialog class="sheet" id="bizDialog" aria-labelledby="bizTitle">
+  <form id="bizForm" novalidate>
+    <div class="sheet-head">
+      <h2 id="bizTitle" data-i18n="biz.title">Business enquiry</h2>
+      <button type="button" class="x" data-close aria-label="Close" data-i18n-aria="ui.close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.4 5 12 10.6 17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6L6.4 19 5 17.6l5.6-5.6L5 6.4z"/></svg></button>
+    </div>
+    <p class="sheet-intro" data-i18n="biz.intro">A few details help us reply with the right plan. This opens WhatsApp with your message ready to send.</p>
+    <label class="f"><span data-i18n="biz.name">Business name</span><input name="name" required autocomplete="organization"></label>
+    <label class="f"><span data-i18n="biz.type">Type of business</span>
+      <select name="type" required>
+        <option value="" data-i18n="biz.choose">Choose one</option>
+        <option value="Hotel" data-i18n="biz.t1">Hotel</option>
+        <option value="Restaurant" data-i18n="biz.t2">Restaurant</option>
+        <option value="Bakery" data-i18n="biz.t3">Bakery</option>
+        <option value="Caterer" data-i18n="biz.t4">Caterer</option>
+        <option value="Tea shop" data-i18n="biz.t5">Tea shop</option>
+        <option value="Hospital" data-i18n="biz.t6">Hospital</option>
+        <option value="School" data-i18n="biz.t7">School</option>
+        <option value="Hostel" data-i18n="biz.t8">Hostel</option>
+        <option value="Other" data-i18n="biz.t9">Other</option>
+      </select>
+    </label>
+    <div class="f-row">
+      <label class="f"><span data-i18n="biz.qty">Cylinders a week</span>
+        <select name="qty">
+          <option value="Not sure yet" data-i18n="biz.q0">Not sure yet</option>
+          <option value="1–2">1–2</option><option value="3–5">3–5</option><option value="6–10">6–10</option>
+          <option value="More than 10" data-i18n="biz.q4">More than 10</option>
+        </select>
+      </label>
+      <label class="f"><span data-i18n="biz.area">Area</span><input name="area" placeholder="e.g. Pala town" data-i18n-ph="biz.areaPh"></label>
+    </div>
+    <label class="f"><span data-i18n="biz.contact">Your name</span><input name="contact" autocomplete="name"></label>
+    <p class="f-error" id="bizError" role="alert" hidden data-i18n="biz.err">Add your business name and type.</p>
+    <div class="sheet-actions">
+      <button type="submit" class="btn btn-ink" data-i18n="biz.send">Continue in WhatsApp</button>
+      <button type="button" class="btn btn-ghost" data-close data-i18n="ui.cancel">Cancel</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- photo viewer -->
+<dialog class="lightbox" id="lightbox" aria-label="Photo viewer">
+  <button type="button" class="lb-x" data-close aria-label="Close" data-i18n-aria="ui.close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.4 5 12 10.6 17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6L6.4 19 5 17.6l5.6-5.6L5 6.4z"/></svg></button>
+  <figure class="lb-fig"><img id="lbImg" alt=""><figcaption id="lbCap" class="mono"></figcaption></figure>
+  <button type="button" class="lb-nav lb-prev" aria-label="Previous photo" data-i18n-aria="ui.prev"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.4 7.4 14 6l-6 6 6 6 1.4-1.4L10.8 12z"/></svg></button>
+  <button type="button" class="lb-nav lb-next" aria-label="Next photo" data-i18n-aria="ui.next"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></button>
+</dialog>
 
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
-<script src="js/main.js?v=7" defer></script>
+<script src="js/i18n-ml.js?v=8" defer></script>
+<script src="js/main.js?v=8" defer></script>
 </body>
 </html>

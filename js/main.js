@@ -1,6 +1,19 @@
 /* Jubilee Indane Home — interactions */
 (() => {
   "use strict";
+
+  /* ============================================================
+     Settings you may edit
+     ============================================================ */
+  // Days the office is closed, as "YYYY-MM-DD" (India time). The contact
+  // section then shows "Closed today · public holiday" on those days.
+  const HOLIDAYS = [];
+  // Thank-you wall. Add only real notes, with the person's permission, e.g.
+  // { quote: "…", name: "Mary, Bharananganam", since: "2004" }
+  const THANKS = [];
+  // Month of the silver jubilee (drives the "celebrating this month" copy).
+  const JUBILEE = { year: 2026, month: 10 };
+
   const NS = "http://www.w3.org/2000/svg";
   const $ = (id) => document.getElementById(id);
   const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
@@ -9,22 +22,155 @@
   const desktop = matchMedia("(min-width: 1024px)");
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
   const WA = "https://wa.me/919447071889";
+  const waLink = (msg) => `${WA}?text=${encodeURIComponent(msg)}`;
+  const isLocal = /^(localhost|127\.|\[::1\])/.test(location.hostname);
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+  const store = {
+    get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (_) { return null; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (_) { /* private mode */ } },
+    del(k) { try { localStorage.removeItem(k); } catch (_) { /* ignore */ } },
+  };
 
   /* ============================================================
-     Smooth scrolling (desktop pointer only; touch stays native)
+     Language (English / Malayalam)
+     ============================================================ */
+  const ML = window.JUBILEE_ML || null;
+  let lang = document.documentElement.lang === "ml" && ML ? "ml" : "en";
+  document.documentElement.lang = lang;
+  const baseTitle = document.title;
+  const STR = {
+    langToggle: "മലയാളം", langLink: "മലയാളത്തിൽ വായിക്കൂ →",
+    weeks: "{n} weeks", week: "1 week",
+    emptyBig: "Pick a date to see your estimate",
+    emptySmall: "We’ll show roughly how much is left and when to book.",
+    bookBy: "Book by {date}", bookNow: "Book now", bookToday: "Book today",
+    leftLine: "About {pct}% left. Runs out around {date}.",
+    empty: "By your estimate this cylinder may already be empty.",
+    reminderSaved: "Reminder for {date} saved. Open it to add to your calendar.",
+    reminderNeedDate: "Pick the date your cylinder was connected first.",
+    forgot: "Your saved details were removed from this device.",
+    done: "{n} of 4 done", allDone: "All 4 done. Now call 1906 or Jubilee from outside.",
+    openNow: "Open now · until 5 PM", closedToday: "Closed · opens today at 9 AM",
+    closedMonday: "Closed · opens Monday at 9 AM", closedTomorrow: "Closed · opens tomorrow at 9 AM",
+    closedHoliday: "Closed today · public holiday", officeHours: "Office hours",
+    "jubKicker.pre": "Silver jubilee · October 2026",
+    "jubKicker.during": "Celebrating 25 years this month",
+    "jubKicker.after": "Silver jubilee · 2001 – 2026",
+    "jubLede.pre": "This October, Jubilee Indane Home turns 25. Gigi James opened the office in 2001. Since then it has grown to about 14,500 homes and 600 businesses. Thank you to every family, shop and kitchen that has cooked with us.",
+    "jubLede.during": "This month, Jubilee Indane Home turns 25. Gigi James opened the office in 2001. Since then it has grown to about 14,500 homes and 600 businesses. Thank you to every family, shop and kitchen that has cooked with us.",
+    "jubLede.after": "In October 2026, Jubilee Indane Home turned 25. Gigi James opened the office in 2001. Since then it has grown to about 14,500 homes and 600 businesses. Thank you to every family, shop and kitchen that has cooked with us.",
+    bestFor: "Best for", body: "Body", use: "Use", domestic: "Domestic", commercial: "Commercial",
+    askWa: "Ask on WhatsApp", bizEnquiry: "Start a business enquiry", planRefill: "Plan a refill",
+    mapRiver: "Meenachil river", mapTown: "Pala town", mapHills: "Hill routes",
+    stop1: "Godown", stop2: "Town centre", stop3: "Neighbourhoods", stop4: "Hill roads",
+  };
+  function t(key, vars = {}) {
+    let s = (lang === "ml" && ML && ML.dyn[key]) || STR[key] || key;
+    for (const v in vars) s = s.split(`{${v}}`).join(vars[v]);
+    return s;
+  }
+  const locale = () => (lang === "ml" ? "ml-IN" : "en-IN");
+  const fmt = (d) => d.toLocaleDateString(locale(), { day: "numeric", month: "short" });
+
+  function applyDom() {
+    const dict = lang === "ml" && ML ? ML.dom : {};
+    $$("[data-i18n]").forEach((el) => {
+      if (el.dataset.en === undefined) el.dataset.en = el.textContent;
+      el.textContent = dict[el.dataset.i18n] || el.dataset.en;
+    });
+    $$("[data-i18n-html]").forEach((el) => {
+      if (el.dataset.enHtml === undefined) el.dataset.enHtml = el.innerHTML;
+      el.innerHTML = dict[el.dataset.i18nHtml] || el.dataset.enHtml;
+    });
+    $$("[data-i18n-aria]").forEach((el) => {
+      if (el.dataset.enAria === undefined) el.dataset.enAria = el.getAttribute("aria-label") || "";
+      el.setAttribute("aria-label", dict[el.dataset.i18nAria] || el.dataset.enAria);
+    });
+    $$("[data-i18n-ph]").forEach((el) => {
+      if (el.dataset.enPh === undefined) el.dataset.enPh = el.getAttribute("placeholder") || "";
+      el.setAttribute("placeholder", dict[el.dataset.i18nPh] || el.dataset.enPh);
+    });
+    $$("[data-lang-toggle]").forEach((b) => {
+      const other = lang === "ml" ? "en" : "ml";
+      b.textContent = b.classList.contains("lang-link") ? t("langLink") : t("langToggle");
+      b.setAttribute("lang", other);
+      b.setAttribute("aria-label", other === "ml" ? "Read this page in Malayalam" : "Read this page in English");
+    });
+    $$("[data-set-lang]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.setLang === lang)));
+    document.title = lang === "ml" && ML ? ML.dyn.title : baseTitle;
+  }
+  const langListeners = [];
+  function setLang(l) {
+    if (l === "ml" && !ML) return;
+    lang = l;
+    document.documentElement.lang = l;
+    try { localStorage.setItem("jubilee.lang", l); } catch (_) { /* ignore */ }
+    applyDom();
+    langListeners.forEach((fn) => fn());
+  }
+  document.addEventListener("click", (e) => {
+    const tog = e.target.closest("[data-lang-toggle]");
+    if (tog) setLang(lang === "ml" ? "en" : "ml");
+    const set = e.target.closest("[data-set-lang]");
+    if (set) setLang(set.dataset.setLang);
+  });
+
+  /* ============================================================
+     Smooth scrolling (mouse / trackpad only; touch stays native)
      ============================================================ */
   let lenis = null;
   if (window.Lenis && finePointer && !reduce) {
     lenis = new window.Lenis({ lerp: 0.09, smoothWheel: true });
     document.documentElement.classList.add("lenis");
-    const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); };
+    const raf = (time) => { lenis.raf(time); requestAnimationFrame(raf); };
     requestAnimationFrame(raf);
   }
+  const lockScroll = (on) => {
+    document.body.classList.toggle("locked", on);
+    if (lenis) on ? lenis.stop() : lenis.start();
+  };
   function scrollToTarget(target) {
     const navH = $("nav").offsetHeight;
-    if (lenis) lenis.scrollTo(target, { offset: -navH + 1, duration: 1.3 });
+    if (lenis) lenis.scrollTo(target, { offset: -navH + 1, duration: 1.2 });
     else target.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
   }
+
+  /* ============================================================
+     Phone / tablet menu
+     ============================================================ */
+  const menu = $("menu"), menuBtn = $("menuBtn");
+  let menuTimer;
+  function openMenu() {
+    clearTimeout(menuTimer);
+    menu.hidden = false;
+    requestAnimationFrame(() => menu.classList.add("open"));
+    menuBtn.setAttribute("aria-expanded", "true");
+    lockScroll(true);
+    setTimeout(() => menu.querySelector("a, button")?.focus({ preventScroll: true }), 50);
+  }
+  function closeMenu(returnFocus) {
+    if (menu.hidden) return;
+    menu.classList.remove("open");
+    menuBtn.setAttribute("aria-expanded", "false");
+    lockScroll(false);
+    menuTimer = setTimeout(() => (menu.hidden = true), reduce ? 0 : 280);
+    if (returnFocus) menuBtn.focus();
+  }
+  menuBtn.addEventListener("click", () => (menu.hidden ? openMenu() : closeMenu(true)));
+  document.addEventListener("keydown", (e) => {
+    if (menu.hidden) return;
+    if (e.key === "Escape") closeMenu(true);
+    if (e.key === "Tab") {
+      const f = [menuBtn, ...$$("a, button", menu)];
+      const i = f.indexOf(document.activeElement);
+      if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); }
+      else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
+    }
+  });
+  desktop.addEventListener("change", () => closeMenu(false));
+
+  // in-page links: close the menu, then glide to the section
   document.addEventListener("click", (e) => {
     const a = e.target.closest('a[href^="#"]');
     if (!a) return;
@@ -32,7 +178,9 @@
     const target = id ? document.getElementById(id) : null;
     if (!target) return;
     e.preventDefault();
-    scrollToTarget(target);
+    const wasOpen = !menu.hidden;
+    closeMenu(false);
+    requestAnimationFrame(() => setTimeout(() => scrollToTarget(target), wasOpen ? 60 : 0));
     history.replaceState(null, "", "#" + id);
   });
 
@@ -55,11 +203,10 @@
      ============================================================ */
   function sealSVG() {
     const id = uid("s");
-    // rosette edge
     let edge = "";
     for (let i = 0; i <= 360; i++) {
-      const t = (i / 360) * Math.PI * 2, r = 94.5 + 3.4 * Math.cos(36 * t);
-      edge += `${i ? "L" : "M"}${(100 + Math.cos(t) * r).toFixed(2)},${(100 + Math.sin(t) * r).toFixed(2)}`;
+      const a = (i / 360) * Math.PI * 2, r = 94.5 + 3.4 * Math.cos(36 * a);
+      edge += `${i ? "L" : "M"}${(100 + Math.cos(a) * r).toFixed(2)},${(100 + Math.sin(a) * r).toFixed(2)}`;
     }
     const emboss = (txt, attrs) =>
       `<text ${attrs} fill="#fff" opacity=".85" transform="translate(0 .8)">${txt}</text><text ${attrs} fill="url(#gSilverInk)">${txt}</text>`;
@@ -87,9 +234,9 @@
   }
   $$("[data-seal]").forEach((s) => (s.innerHTML = sealSVG()));
 
-  // pointer-driven sheen + tilt
   function sealInteract(host, seal, tilt) {
-    let hovering = false, visible = true, t0 = performance.now();
+    let hovering = false, visible = true;
+    const t0 = performance.now();
     const set = (sx, sy, sa) => {
       seal.style.setProperty("--sx", sx + "%");
       seal.style.setProperty("--sy", sy + "%");
@@ -107,9 +254,9 @@
     }
     if (!reduce) {
       new IntersectionObserver(([e]) => (visible = e.isIntersecting)).observe(host);
-      (function idle(t) {
+      (function idle(now) {
         if (!hovering && visible) {
-          const k = (t - t0) / 1000;
+          const k = (now - t0) / 1000;
           set(50 + Math.cos(k * 0.7) * 30, 40 + Math.sin(k * 0.9) * 22, k * 25);
         }
         requestAnimationFrame(idle);
@@ -155,7 +302,6 @@
       }
       if (h > 90) s += `<text x="${cx}" y="${y0 + h * 0.84}" text-anchor="middle" font-family="Archivo" font-weight="900" font-size="${Math.round(w * 0.15)}" fill="#fff" opacity=".92" style="font-stretch:112%">INDANE</text>`;
     } else {
-      // 10 kg composite: translucent body, gas visible inside
       const hw = w * 0.74, hx = cx - hw / 2, hy = y0 - 24;
       s += `<path fill-rule="evenodd" fill="url(#gNavy)" d="${rr(hx, hy, hw, 34, 12)} ${rr(cx - hw * 0.3, hy + 6, hw * 0.6, 12, 6)}"/>`;
       s += `<rect x="${cx - w * 0.44}" y="${base - footH}" width="${w * 0.88}" height="${footH}" rx="4" fill="url(#gNavy)"/>`;
@@ -172,43 +318,42 @@
   }
 
   /* ============================================================
-     Cylinder data
+     Cylinder data (English; Malayalam overrides in i18n-ml.js)
      ============================================================ */
   const INFO = {
     "5": {
-      short: "Small", name: "Compact 5 kg", ml: "ചെറിയ കുടുംബങ്ങൾക്ക്", spec: "Domestic · 5 kg",
+      short: "Small", name: "Compact 5 kg", spec: "Domestic · 5 kg",
       text: "Small and easy to carry. Good for one or two people, or as a spare alongside a main cylinder.",
       best: "Small households, students, working people", body: "Steel", weeks: 4,
       ask: "Hello Jubilee, I'd like to ask about the 5 kg Indane cylinder.",
-      book: "Hello Jubilee, I'd like to book an Indane refill (5 kg). My consumer number is: ",
+      book: "Hello Jubilee, I'd like to book an Indane refill (5 kg).",
     },
     "10": {
-      short: "Composite", name: "10 kg composite", ml: "ഭാരം കുറവ്, ഗ്യാസ് കാണാം", spec: "Domestic · 10 kg composite",
+      short: "Composite", name: "10 kg composite", spec: "Domestic · 10 kg composite",
       text: "Made from composite material instead of steel, so it’s lighter to lift, doesn’t rust, and you can see how much gas is left.",
       best: "Homes that want a lighter cylinder", body: "Composite, see-through", weeks: 4,
       ask: "Hello Jubilee, I'd like to ask about the 10 kg composite Indane cylinder.",
-      book: "Hello Jubilee, I'd like to book an Indane refill (10 kg composite). My consumer number is: ",
+      book: "Hello Jubilee, I'd like to book an Indane refill (10 kg composite).",
     },
     "14.2": {
-      short: "Home", name: "Standard 14.2 kg", ml: "വീടുകൾക്ക്", spec: "Domestic · 14.2 kg",
+      short: "Home", name: "Standard 14.2 kg", spec: "Domestic · 14.2 kg",
       text: "The regular domestic Indane cylinder. New connections, refills and help with your supply, delivered on a route planned for your part of Pala.",
       best: "Most family kitchens", body: "Steel", weeks: 6,
       ask: "Hello Jubilee, I'd like to ask about a new 14.2 kg Indane connection.",
-      book: "Hello Jubilee, I'd like to book an Indane refill (14.2 kg). My consumer number is: ",
+      book: "Hello Jubilee, I'd like to book an Indane refill (14.2 kg).",
     },
     "19": {
-      short: "Business", name: "Commercial 19 kg", ml: "സ്ഥാപനങ്ങൾക്ക്", spec: "Commercial · 19 kg",
+      short: "Business", name: "Commercial 19 kg", spec: "Commercial · 19 kg",
       text: "For kitchens that feed a lot of people. Tell us what you cook and how often, and we’ll work out a supply plan together.",
       best: "Commercial kitchens", body: "Steel", weeks: 2, commercial: true,
       who: ["Hotels", "Restaurants", "Bakeries", "Caterers", "Tea shops", "Hospitals", "Schools", "Hostels"],
       ask: "Hello Jubilee, I'd like to ask about commercial 19 kg LPG for my business.",
-      book: "Hello Jubilee, I'd like to book a commercial 19 kg LPG refill for my business: ",
+      book: "Hello Jubilee, I'd like to book a commercial 19 kg LPG refill.",
     },
   };
   const KINDS = ["5", "10", "14.2", "19"];
-  const waLink = (msg) => `${WA}?text=${encodeURIComponent(msg)}`;
+  const info = (k) => (lang === "ml" && ML && ML.info[k] ? { ...INFO[k], ...ML.info[k] } : INFO[k]);
 
-  /* roving keyboard focus for radio / tab groups */
   function roving(buttons, onPick) {
     buttons.forEach((b, i) => {
       b.addEventListener("click", () => onPick(b.dataset.kind, true));
@@ -217,39 +362,63 @@
         if (!d) return;
         e.preventDefault();
         const n = buttons[(i + d + buttons.length) % buttons.length];
-        n.focus(); onPick(n.dataset.kind, true);
+        n.focus();
+        onPick(n.dataset.kind, true);
       });
     });
   }
+  function onSwipe(node, fn) {
+    let x0 = null, y0 = 0;
+    node.addEventListener("pointerdown", (e) => { if (e.pointerType !== "mouse") { x0 = e.clientX; y0 = e.clientY; } });
+    node.addEventListener("pointerup", (e) => {
+      if (x0 === null) return;
+      const dx = e.clientX - x0, dy = e.clientY - y0;
+      x0 = null;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) fn(dx < 0 ? 1 : -1);
+    });
+    node.addEventListener("pointercancel", () => (x0 = null));
+  }
 
   /* ============================================================
-     Refill planner
+     Toast
      ============================================================ */
-  let kind = "14.2";
+  const toast = document.createElement("div");
+  toast.className = "toast"; toast.setAttribute("role", "status");
+  document.body.appendChild(toast);
+  let toastT;
+  function showToast(msg) {
+    toast.textContent = msg; toast.classList.add("show");
+    clearTimeout(toastT); toastT = setTimeout(() => toast.classList.remove("show"), 3400);
+  }
+
+  /* ============================================================
+     Refill planner (remembers entries on this device only)
+     ============================================================ */
+  const PLAN_KEY = "jubilee.planner";
   const sizes = $("sizes");
   KINDS.forEach((k) => {
     const b = document.createElement("button");
     b.type = "button"; b.className = "size"; b.dataset.kind = k;
     b.setAttribute("role", "radio");
-    b.innerHTML = `${cylSVG(k)}<b>${k} kg</b><small>${INFO[k].short}</small>`;
+    b.innerHTML = `${cylSVG(k)}<b>${k} kg</b><small></small>`;
     sizes.appendChild(b);
   });
   const sizeBtns = $$(".size", sizes);
+  const renderSizeLabels = () => sizeBtns.forEach((b) => (b.querySelector("small").textContent = info(b.dataset.kind).short));
 
-  const last = $("last"), weeks = $("weeks"), chips = $("chips");
+  const last = $("last"), weeks = $("weeks"), chips = $("chips"), consumer = $("consumer");
   const iso = (d) => new Date(d.getTime() - d.getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
   const today0 = new Date(); today0.setHours(0, 0, 0, 0);
-  const def = new Date(today0); def.setDate(def.getDate() - 24);
-  last.value = iso(def); last.max = iso(today0);
-  const fmt = (d) => d.toLocaleDateString("en-IN", { day: "numeric", month: "short" });
+  last.max = iso(today0);
   const RATE = { 2: 0.17, 4: 0.32, 6: 0.45, 8: 0.6 }; // rough kg/day by household size
+  let kind = "14.2", shownPct = null, pctRaf = 0, bookByDate = null;
 
-  let shownPct = 0, pctRaf = 0, bookByDate = today0;
   function animatePct(to) {
     cancelAnimationFrame(pctRaf);
-    const from = shownPct, t0 = performance.now(), dur = reduce ? 0 : 700;
-    const step = (t) => {
-      const k = dur ? clamp((t - t0) / dur, 0, 1) : 1;
+    if (to === null) { shownPct = null; $("pct").textContent = "–"; return; }
+    const from = shownPct ?? to, t0 = performance.now(), dur = reduce ? 0 : 700;
+    const step = (now) => {
+      const k = dur ? clamp((now - t0) / dur, 0, 1) : 1;
       shownPct = Math.round(from + (to - from) * (1 - Math.pow(1 - k, 3)));
       $("pct").textContent = shownPct;
       if (k < 1) pctRaf = requestAnimationFrame(step);
@@ -265,78 +434,145 @@
       b.tabIndex = on ? 0 : -1;
     });
     $("gaugeArt").innerHTML = cylSVG(k, { gauge: true, level: 1 });
-    $("specKg").textContent = INFO[k].spec;
-    chips.classList.toggle("hidden", !!INFO[k].commercial);
-    if (user) { weeks.value = INFO[k].weeks; $$("button", chips).forEach((c) => c.classList.remove("on")); }
+    $("unsure").hidden = !!INFO[k].commercial;
+    if (user) {
+      weeks.value = INFO[k].weeks;
+      $$("button", chips).forEach((c) => c.classList.remove("on"));
+      save();
+    }
     requestAnimationFrame(update);
   }
   roving(sizeBtns, setKind);
 
+  function bookingMessage() {
+    const num = consumer.value.trim();
+    return INFO[kind].book + (num ? ` My consumer number is ${num}.` : "");
+  }
+
   function update() {
     const w = +weeks.value;
-    $("weeksOut").textContent = w === 1 ? "1 week" : `${w} weeks`;
+    $("weeksOut").textContent = w === 1 ? t("week") : t("weeks", { n: w });
     weeks.style.setProperty("--fill", ((w - 1) / 11) * 100 + "%");
-    const start = last.value ? new Date(last.value + "T00:00:00") : def;
+    $("specKg").textContent = info(kind).spec;
+    $("bookBtn").href = waLink(bookingMessage());
+
+    const hasDate = !!last.value;
+    $("gaugeStage").classList.toggle("empty", !hasDate);
+    $("timeline").classList.toggle("is-hidden", !hasDate);
+    $("tlDates").classList.toggle("is-hidden", !hasDate);
+    $("remindBtn").setAttribute("aria-disabled", String(!hasDate));
+    const dot = $("statusDot");
+    if (!hasDate) {
+      animatePct(null);
+      $$("#gaugeArt .lvl").forEach((lv) => (lv.style.transform = "scaleY(1)"));
+      dot.className = "status-dot idle";
+      $("resBig").textContent = t("emptyBig");
+      $("resSmall").textContent = t("emptySmall");
+      $$("button", $("quickDates")).forEach((c) => c.classList.remove("on"));
+      bookByDate = null;
+      return;
+    }
+
+    const start = new Date(last.value + "T00:00:00");
     const days = w * 7;
     const used = Math.max(0, (today0 - start) / 864e5);
     const left = clamp(1 - used / days, 0, 1);
     const runOut = new Date(start.getTime() + days * 864e5);
     const bookBy = new Date(runOut.getTime() - Math.min(4, Math.round(days * 0.15)) * 864e5);
     bookByDate = bookBy < today0 ? today0 : bookBy;
-    animatePct(Math.round(left * 100));
+    const pct = Math.round(left * 100);
+    animatePct(pct);
     $$("#gaugeArt .lvl").forEach((lv) => {
       lv.style.transform = `scaleY(${left})`;
       if (CYL[kind].type === "red") lv.setAttribute("fill", left < 0.2 ? "#FF6B5E" : left < 0.4 ? "#FFC24B" : "#58B7FF");
     });
-    const dot = $("statusDot");
     dot.className = "status-dot" + (left < 0.2 || bookBy <= today0 ? " bad" : left < 0.4 ? " warn" : "");
     if (left <= 0) {
-      $("resBig").textContent = "Book today";
-      $("resSmall").textContent = "By your estimate this cylinder may already be empty.";
-    } else if (bookBy <= today0) {
-      $("resBig").textContent = "Book now";
-      $("resSmall").textContent = `About ${Math.round(left * 100)}% left. Runs out around ${fmt(runOut)}.`;
+      $("resBig").textContent = t("bookToday");
+      $("resSmall").textContent = t("empty");
     } else {
-      $("resBig").textContent = "Book by " + fmt(bookBy);
-      $("resSmall").textContent = `About ${Math.round(left * 100)}% left. Runs out around ${fmt(runOut)}.`;
+      $("resBig").textContent = bookBy <= today0 ? t("bookNow") : t("bookBy", { date: fmt(bookBy) });
+      $("resSmall").textContent = t("leftLine", { pct, date: fmt(runOut) });
     }
+    const agoDays = Math.round(used);
+    $$("button", $("quickDates")).forEach((c) => c.classList.toggle("on", +c.dataset.days === agoDays));
     const todayFrac = clamp(used / days, 0, 1), bookFrac = clamp((bookBy - start) / (runOut - start), 0, 1);
-    $("mkToday").style.left = clamp(todayFrac * 100, 2, 98) + "%";
-    $("mkBook").style.left = clamp(bookFrac * 100, 2, 98) + "%";
+    [["mkToday", todayFrac], ["mkBook", bookFrac]].forEach(([id, f]) => {
+      const mk = $(id);
+      mk.style.left = clamp(f * 100, 1, 99) + "%";
+      mk.classList.toggle("edge-l", f < 0.18);
+      mk.classList.toggle("edge-r", f > 0.72);
+    });
     const fill = $("tlFill");
     fill.style.width = todayFrac * 100 + "%";
-    fill.style.setProperty("--bgw", todayFrac > 0 ? (100 / todayFrac) + "%" : "100%");
+    fill.style.setProperty("--bgw", todayFrac > 0 ? 100 / todayFrac + "%" : "100%");
     $("tlStart").textContent = fmt(start);
     $("tlEnd").textContent = fmt(runOut);
-    $("bookBtn").href = waLink(INFO[kind].book);
   }
-  last.addEventListener("input", update);
-  weeks.addEventListener("input", () => { $$("button", chips).forEach((c) => c.classList.remove("on")); update(); });
-  $$("button", chips).forEach((c) => c.addEventListener("click", () => {
-    const kg = parseFloat(kind);
-    weeks.value = clamp(Math.round(kg / RATE[c.dataset.people] / 7), 1, 12);
-    $$("button", chips).forEach((x) => x.classList.toggle("on", x === c));
+
+  let deferredInstall = null;
+  function save() {
+    store.set(PLAN_KEY, { kind, last: last.value, weeks: +weeks.value, consumer: consumer.value.trim() });
+    $("savedRow").hidden = false;
+    maybeShowInstall();
+  }
+  function forget() {
+    store.del(PLAN_KEY);
+    last.value = ""; consumer.value = "";
+    $("consumerBox").open = false; $("unsure").open = false;
+    $("savedRow").hidden = true;
+    setKind("14.2", false);
+    weeks.value = INFO["14.2"].weeks;
     update();
+    maybeShowInstall();
+    showToast(t("forgot"));
+  }
+
+  last.addEventListener("input", () => { if (last.value > last.max) last.value = last.max; save(); update(); });
+  weeks.addEventListener("input", () => { $$("button", chips).forEach((c) => c.classList.remove("on")); save(); update(); });
+  consumer.addEventListener("input", () => {
+    const clean = consumer.value.replace(/[^0-9A-Za-z-]/g, "");
+    if (clean !== consumer.value) consumer.value = clean;
+    save(); update();
+  });
+  $$("button", $("quickDates")).forEach((c) => c.addEventListener("click", () => {
+    const d = new Date(today0); d.setDate(d.getDate() - +c.dataset.days);
+    last.value = iso(d); save(); update();
   }));
+  $$("button", chips).forEach((c) => c.addEventListener("click", () => {
+    weeks.value = clamp(Math.round(parseFloat(kind) / RATE[c.dataset.people] / 7), 1, 12);
+    $$("button", chips).forEach((x) => x.classList.toggle("on", x === c));
+    save(); update();
+  }));
+  $("forgetBtn").addEventListener("click", forget);
+
+  // restore saved entries
+  (function restore() {
+    const s = store.get(PLAN_KEY);
+    if (s && INFO[s.kind]) {
+      kind = s.kind;
+      if (typeof s.last === "string" && /^\d{4}-\d{2}-\d{2}$/.test(s.last) && s.last <= last.max) last.value = s.last;
+      weeks.value = clamp(+s.weeks || INFO[kind].weeks, 1, 12);
+      if (s.consumer) { consumer.value = String(s.consumer).replace(/[^0-9A-Za-z-]/g, "").slice(0, 20); $("consumerBox").open = true; }
+      $("savedRow").hidden = false;
+    } else {
+      weeks.value = INFO[kind].weeks;
+    }
+    setKind(kind, false);
+  })();
 
   // calendar reminder (.ics)
-  const toast = document.createElement("div");
-  toast.className = "toast"; toast.setAttribute("role", "status");
-  document.body.appendChild(toast);
-  let toastT;
-  function showToast(msg) {
-    toast.textContent = msg; toast.classList.add("show");
-    clearTimeout(toastT); toastT = setTimeout(() => toast.classList.remove("show"), 3200);
-  }
   $("remindBtn").addEventListener("click", () => {
+    if (!bookByDate) { showToast(t("reminderNeedDate")); last.focus(); return; }
     const d = bookByDate, n = new Date(d.getTime() + 864e5);
     const ymd = (x) => `${x.getFullYear()}${String(x.getMonth() + 1).padStart(2, "0")}${String(x.getDate()).padStart(2, "0")}`;
     const stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d+/, "");
+    const summary = lang === "ml" ? `ഇൻഡേൻ റീഫിൽ ബുക്ക് ചെയ്യൂ (${kind} kg)` : `Book Indane refill (${kind} kg)`;
     const ics = [
       "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Jubilee Indane Home//Refill planner//EN", "BEGIN:VEVENT",
       `UID:${stamp}-${kind}@jubileeindanehome`, `DTSTAMP:${stamp}`,
       `DTSTART;VALUE=DATE:${ymd(d)}`, `DTEND;VALUE=DATE:${ymd(n)}`,
-      `SUMMARY:Book Indane refill (${kind} kg)`,
+      `SUMMARY:${summary}`,
       `DESCRIPTION:Call Jubilee Indane Home on +91 94470 71889 or message on WhatsApp: ${WA}`,
       "BEGIN:VALARM", "TRIGGER:PT9H", "ACTION:DISPLAY", "DESCRIPTION:Book your Indane refill", "END:VALARM",
       "END:VEVENT", "END:VCALENDAR",
@@ -346,45 +582,121 @@
     a.href = url; a.download = "jubilee-refill-reminder.ics";
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(url), 2000);
-    showToast(`Reminder for ${fmt(d)} saved. Open it to add to your calendar.`);
+    showToast(t("reminderSaved", { date: fmt(d) }));
+  });
+
+  // "Add to home screen" (Chrome / Android), offered once someone uses the planner
+  function maybeShowInstall() {
+    $("installBtn").hidden = !(deferredInstall && store.get(PLAN_KEY));
+  }
+  addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); deferredInstall = e; maybeShowInstall(); });
+  addEventListener("appinstalled", () => { deferredInstall = null; $("installBtn").hidden = true; });
+  $("installBtn").addEventListener("click", async () => {
+    if (!deferredInstall) return;
+    deferredInstall.prompt();
+    try { await deferredInstall.userChoice; } catch (_) { /* ignore */ }
+    deferredInstall = null; $("installBtn").hidden = true;
   });
 
   /* ============================================================
-     Cylinder range (shelf + detail)
+     Cylinder range (shelf + detail, swipe on phones)
      ============================================================ */
   const shelf = $("shelf"), detail = $("cylDetail");
   KINDS.forEach((k) => {
     const b = document.createElement("button");
     b.type = "button"; b.className = "cyl-tab"; b.dataset.kind = k;
     b.setAttribute("role", "tab"); b.setAttribute("aria-controls", "cylDetail"); b.id = "tab-" + k.replace(".", "-");
-    b.innerHTML = `${cylSVG(k, { level: 0.72 })}<span class="lbl"><b>${k} kg</b><small>${INFO[k].short}</small></span>`;
+    b.innerHTML = `${cylSVG(k, { level: 0.72 })}<span class="lbl"><b>${k} kg</b><small></small></span>`;
     shelf.appendChild(b);
   });
   const tabs = $$(".cyl-tab", shelf);
+  let shown = "14.2";
   function showCyl(k) {
-    tabs.forEach((t) => {
-      const on = t.dataset.kind === k;
-      t.setAttribute("aria-selected", String(on)); t.tabIndex = on ? 0 : -1;
+    shown = k;
+    tabs.forEach((tb) => {
+      const on = tb.dataset.kind === k;
+      tb.setAttribute("aria-selected", String(on)); tb.tabIndex = on ? 0 : -1;
+      tb.querySelector("small").textContent = info(tb.dataset.kind).short;
     });
     detail.setAttribute("aria-labelledby", "tab-" + k.replace(".", "-"));
-    const I = INFO[k];
+    const I = info(k);
+    const primary = I.commercial
+      ? `<button type="button" class="btn btn-ink" data-biz>${esc(t("bizEnquiry"))}</button>`
+      : `<a class="btn btn-ink" href="${waLink(INFO[k].ask)}" target="_blank" rel="noopener">${esc(t("askWa"))}</a>`;
     detail.innerHTML = `
-      <p class="ml d-ml" lang="ml">${I.ml}</p>
       <div class="d-kg">${k}<small>kg</small></div>
-      <div><h3>${I.name}</h3><p>${I.text}</p>${I.who ? `<ul class="who">${I.who.map((x) => `<li>${x}</li>`).join("")}</ul>` : ""}</div>
-      <dl class="d-facts"><dt>Best for</dt><dd>${I.best}</dd><dt>Body</dt><dd>${I.body}</dd><dt>Use</dt><dd>${I.commercial ? "Commercial" : "Domestic"}</dd></dl>
-      <div class="d-act">
-        <a class="btn btn-ink" href="${waLink(I.ask)}" target="_blank" rel="noopener">${I.commercial ? "Start a business enquiry" : "Ask on WhatsApp"}</a>
-        <a class="btn btn-ghost" href="#refill" data-plan="${k}">Plan a refill</a>
-      </div>`;
+      <div><h3>${esc(I.name)}</h3><p>${esc(I.text)}</p>${I.who ? `<ul class="who">${I.who.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}</div>
+      <dl class="d-facts"><dt>${esc(t("bestFor"))}</dt><dd>${esc(I.best)}</dd><dt>${esc(t("body"))}</dt><dd>${esc(I.body)}</dd><dt>${esc(t("use"))}</dt><dd>${esc(I.commercial ? t("commercial") : t("domestic"))}</dd></dl>
+      <div class="d-act">${primary}<a class="btn btn-ghost" href="#refill" data-plan="${k}">${esc(t("planRefill"))}</a></div>`;
   }
   roving(tabs, showCyl);
+  const stepCyl = (d) => showCyl(KINDS[(KINDS.indexOf(shown) + d + KINDS.length) % KINDS.length]);
+  onSwipe(detail, stepCyl);
+  onSwipe(shelf, stepCyl);
   detail.addEventListener("click", (e) => {
     const p = e.target.closest("[data-plan]");
     if (p) setKind(p.dataset.plan, true);
+    if (e.target.closest("[data-biz]")) openBiz();
   });
   showCyl("14.2");
-  setKind("14.2", true);
+
+  /* ============================================================
+     Dialogs: business enquiry + photo viewer
+     ============================================================ */
+  function wireDialog(dlg) {
+    dlg.addEventListener("click", (e) => {
+      if (e.target === dlg || e.target.closest("[data-close]")) dlg.close();
+    });
+    dlg.addEventListener("close", () => lockScroll(false));
+  }
+  const biz = $("bizDialog"), bizForm = $("bizForm");
+  wireDialog(biz);
+  function openBiz() {
+    if (typeof biz.showModal !== "function") { window.open(waLink(INFO["19"].ask), "_blank", "noopener"); return; }
+    $("bizError").hidden = true;
+    biz.showModal(); lockScroll(true);
+    setTimeout(() => bizForm.elements.name.focus(), 50);
+  }
+  bizForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const f = bizForm.elements;
+    const name = f.name.value.trim(), type = f.type.value;
+    if (!name || !type) {
+      $("bizError").hidden = false;
+      (name ? f.type : f.name).focus();
+      return;
+    }
+    const lines = [
+      "Hello Jubilee, I'd like to enquire about commercial LPG.",
+      `Business: ${name}`, `Type: ${type}`, `Cylinders a week: ${f.qty.value}`,
+      f.area.value.trim() && `Area: ${f.area.value.trim()}`,
+      f.contact.value.trim() && `Name: ${f.contact.value.trim()}`,
+    ].filter(Boolean);
+    window.open(waLink(lines.join("\n")), "_blank", "noopener");
+    biz.close(); bizForm.reset();
+  });
+
+  const lb = $("lightbox"), lbImg = $("lbImg"), lbCap = $("lbCap");
+  const photos = $$("#jubPhotos figure");
+  let lbIndex = 0;
+  wireDialog(lb);
+  function showPhoto(i) {
+    lbIndex = (i + photos.length) % photos.length;
+    const img = photos[lbIndex].querySelector("img");
+    lbImg.src = img.currentSrc || img.src; lbImg.alt = img.alt;
+    lbCap.textContent = photos[lbIndex].querySelector("figcaption").textContent;
+  }
+  photos.forEach((fig, i) => fig.querySelector(".ph").addEventListener("click", () => {
+    if (typeof lb.showModal !== "function") return;
+    showPhoto(i); lb.showModal(); lockScroll(true);
+  }));
+  lb.querySelector(".lb-prev").addEventListener("click", () => showPhoto(lbIndex - 1));
+  lb.querySelector(".lb-next").addEventListener("click", () => showPhoto(lbIndex + 1));
+  lb.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") showPhoto(lbIndex - 1);
+    if (e.key === "ArrowRight") showPhoto(lbIndex + 1);
+  });
+  onSwipe(lb, (d) => showPhoto(lbIndex + d));
 
   /* ============================================================
      Topographic map + route story
@@ -416,6 +728,7 @@
     [[620, 520], [600, 760], [560, 1000]],
     [[620, 520], [760, 300], [820, 0]],
   ];
+  const mapLabels = [];
   function drawTopo(g, seed, labels) {
     const r = rng(seed);
     HILLS.forEach((h, hi) => {
@@ -424,9 +737,9 @@
       for (let l = 1; l <= h.l; l++) {
         const rad = h.r * (l / h.l), pts = [];
         for (let a = 0; a < 48; a++) {
-          const t = (a / 48) * Math.PI * 2;
-          const k = 1 + am[0] * Math.sin(2 * t + ph[0] + l * 0.08) + am[1] * Math.sin(3 * t + ph[1] - l * 0.05) + am[2] * Math.sin(5 * t + ph[2]);
-          pts.push([h.x + Math.cos(t) * rad * k * 1.15, h.y + Math.sin(t) * rad * k * 0.85]);
+          const th = (a / 48) * Math.PI * 2;
+          const k = 1 + am[0] * Math.sin(2 * th + ph[0] + l * 0.08) + am[1] * Math.sin(3 * th + ph[1] - l * 0.05) + am[2] * Math.sin(5 * th + ph[2]);
+          pts.push([h.x + Math.cos(th) * rad * k * 1.15, h.y + Math.sin(th) * rad * k * 0.85]);
         }
         el("path", { d: smoothClosed(pts), fill: "none", stroke: l % 5 === 0 ? "#8FA2AF" : "#AFBEC8", "stroke-width": l % 5 === 0 ? 1.4 : 0.8 }, layer);
       }
@@ -434,37 +747,24 @@
     el("path", { d: smoothOpen(RIVER), fill: "none", stroke: "#6E9CC0", "stroke-width": 9, "stroke-linecap": "round", opacity: 0.55 }, g);
     ROADS.forEach((rd) => el("path", { d: smoothOpen(rd), fill: "none", stroke: "#fff", "stroke-width": 5, opacity: 0.9 }, g));
     if (labels) {
-      [["Meenachil river", 200, 640, -4], ["Pala town", 650, 500, 0], ["Hill routes", 1250, 250, 0]].forEach(([t, x, y, rot], i) => {
-        el("text", { x, y, class: "map-label" + (i === 1 ? " big" : ""), transform: `rotate(${rot} ${x} ${y})` }, g).textContent = t;
+      [["mapRiver", 200, 640, -4], ["mapTown", 650, 500, 0], ["mapHills", 1250, 250, 0]].forEach(([key, x, y, rot], i) => {
+        const tx = el("text", { x, y, class: "map-label" + (i === 1 ? " big" : ""), transform: `rotate(${rot} ${x} ${y})` }, g);
+        mapLabels.push([tx, key]);
       });
     }
   }
 
-  // hero map
   const hero = $("heroMap");
   const hg = el("g", {}, hero);
   drawTopo(hg, 7, true);
   const heroRoute = el("path", {
     d: smoothOpen([[330, 720], [470, 640], [640, 540], [820, 560], [930, 470], [1080, 420], [1180, 330], [1300, 270]]),
-    fill: "none", stroke: "#F05A1A", "stroke-width": 5, "stroke-linecap": "round",
+    fill: "none", stroke: "#F05A1A", "stroke-width": 5, "stroke-linecap": "round", class: "hero-route",
   }, hg);
   [[640, 540, true], [1300, 270, false]].forEach(([cx, cy, pulse]) => {
     if (pulse) el("circle", { cx, cy, r: 6, fill: "#F05A1A", class: "pin-pulse" }, hg);
-    el("circle", { cx, cy, r: 9, fill: "#F05A1A", stroke: "#fff", "stroke-width": 3 }, hg);
+    el("circle", { cx, cy, r: 9, fill: "#F05A1A", stroke: "#fff", "stroke-width": 3, class: "pin" }, hg);
   });
-  function frameHero() {
-    if (desktop.matches) {
-      hero.setAttribute("viewBox", "0 0 1600 1000");
-      hero.setAttribute("preserveAspectRatio", "xMidYMid slice");
-      hg.setAttribute("transform", "translate(330,40)");
-    } else {
-      hero.setAttribute("viewBox", "280 150 1100 640");
-      hero.setAttribute("preserveAspectRatio", "xMidYMin meet");
-      hg.removeAttribute("transform");
-    }
-  }
-  frameHero();
-  desktop.addEventListener("change", frameHero);
   const HL = heroRoute.getTotalLength();
   heroRoute.style.strokeDasharray = HL;
   heroRoute.style.strokeDashoffset = reduce ? 0 : HL;
@@ -477,6 +777,7 @@
   if (!reduce && finePointer) {
     const layers = $$(".layer", hero);
     let px = 0, py = 0, tx = 0, ty = 0, ticking = false;
+    layers.forEach((l) => (l.style.transition = "none"));
     const loop = () => {
       px += (tx - px) * 0.08; py += (ty - py) * 0.08;
       layers.forEach((l) => { const d = +l.dataset.depth * 12; l.style.transform = `translate(${(-px * d).toFixed(2)}px,${(-py * d).toFixed(2)}px)`; });
@@ -487,16 +788,14 @@
       tx = e.clientX / innerWidth - 0.5; ty = e.clientY / innerHeight - 0.5;
       if (!ticking) { ticking = true; requestAnimationFrame(loop); }
     }, { passive: true });
-    $$(".layer", hero).forEach((l) => (l.style.transition = "none"));
   }
 
-  // route story
   drawTopo($("routeTopo"), 7, false);
-  const STOPS = [[330, 720, "Godown"], [640, 520, "Town centre"], [930, 640, "Neighbourhoods"], [1300, 270, "Hill roads"]];
+  const STOPS = [[330, 720, "stop1"], [640, 520, "stop2"], [930, 640, "stop3"], [1300, 270, "stop4"]];
   const routePts = [[330, 720], [430, 690], [520, 600], [640, 520], [740, 600], [840, 690], [930, 640], [1030, 560], [1100, 470], [1180, 360], [1240, 300], [1300, 270]];
   const rp = $("routePath"), ghost = $("routeGhost");
-  const rd = smoothOpen(routePts);
-  rp.setAttribute("d", rd); ghost.setAttribute("d", rd);
+  const rdPath = smoothOpen(routePts);
+  rp.setAttribute("d", rdPath); ghost.setAttribute("d", rdPath);
   const RL = rp.getTotalLength();
   rp.style.strokeDasharray = RL; rp.style.strokeDashoffset = RL;
   const stopLen = STOPS.map(([x, y]) => {
@@ -504,11 +803,17 @@
     for (let s = 0; s <= RL; s += 4) { const p = rp.getPointAtLength(s), dd = (p.x - x) ** 2 + (p.y - y) ** 2; if (dd < bd) { bd = dd; best = s; } }
     return best;
   });
-  const dots = STOPS.map(([x, y, name], i) => {
+  const stopLabels = [];
+  const dots = STOPS.map(([x, y, key], i) => {
     const c = el("circle", { cx: x, cy: y, r: 12, class: "stopdot" }, $("routeStops"));
-    el("text", { x: i === 3 ? x - 20 : x + 20, y: y - 18, class: "map-label big", "text-anchor": i === 3 ? "end" : "start" }, $("routeStops")).textContent = `${i + 1} · ${name}`;
+    const tx = el("text", { x: i === 3 ? x - 24 : x + 24, y: y - 22, class: "map-label big stop-label", "text-anchor": i === 3 ? "end" : "start" }, $("routeStops"));
+    stopLabels.push([tx, key, i + 1]);
     return c;
   });
+  function renderMapText() {
+    mapLabels.forEach(([node, key]) => (node.textContent = t(key)));
+    stopLabels.forEach(([node, key, n]) => (node.textContent = `${n} · ${t(key)}`));
+  }
   const van = $("van"), route = $("route"), stick = route.querySelector(".route-stick");
   const stops = $$(".stop"), bars = $$(".progress b"), nav = $("nav");
   let lastActive = -1;
@@ -522,24 +827,40 @@
     const len = p * RL;
     rp.style.strokeDashoffset = RL - len;
     const pt = rp.getPointAtLength(len);
-    van.setAttribute("transform", `translate(${pt.x.toFixed(1)},${pt.y.toFixed(1)})`);
+    van.setAttribute("transform", `translate(${pt.x.toFixed(1)},${pt.y.toFixed(1)}) scale(${van.dataset.scale || 1})`);
     dots.forEach((c, i) => c.classList.toggle("hit", len >= stopLen[i] - 2));
     let active = 0;
     stops.forEach((s, i) => { if (p >= +s.dataset.at) active = i; });
     if (active !== lastActive) { stops.forEach((s, i) => s.classList.toggle("on", i === active)); lastActive = active; }
     bars.forEach((b, i) => {
-      const start = [0, 0.26, 0.52, 0.78][i], span = i === 3 ? 0.22 : 0.26;
-      b.style.transform = `scaleX(${clamp((p - start) / span, 0, 1)})`;
+      const s0 = [0, 0.26, 0.52, 0.78][i], span = i === 3 ? 0.22 : 0.26;
+      b.style.transform = `scaleX(${clamp((p - s0) / span, 0, 1)})`;
     });
+  }
+  function frameMaps() {
+    const phone = !desktop.matches;
+    if (phone) {
+      hero.setAttribute("viewBox", "280 150 1100 640");
+      hero.setAttribute("preserveAspectRatio", "xMidYMin meet");
+      hg.removeAttribute("transform");
+    } else {
+      hero.setAttribute("viewBox", "0 0 1600 1000");
+      hero.setAttribute("preserveAspectRatio", "xMidYMid slice");
+      hg.setAttribute("transform", "translate(330,40)");
+    }
+    dots.forEach((d) => d.setAttribute("r", phone ? 22 : 12));
+    van.dataset.scale = phone ? 1.7 : 1;
+    onScroll();
   }
   let scrollQueued = false;
   const queue = () => { if (!scrollQueued) { scrollQueued = true; requestAnimationFrame(() => { scrollQueued = false; onScroll(); }); } };
   addEventListener("scroll", queue, { passive: true });
   addEventListener("resize", queue);
-  onScroll();
+  desktop.addEventListener("change", frameMaps);
+  frameMaps();
 
   /* ============================================================
-     Nav active link
+     Nav: highlight the section in view
      ============================================================ */
   const links = $$(".nav-links a");
   const linkFor = Object.fromEntries(links.map((a) => [a.getAttribute("href").slice(1), a]));
@@ -553,33 +874,77 @@
      Safety checklist
      ============================================================ */
   const boxes = $$("#check input");
-  boxes.forEach((b) => b.addEventListener("change", () => {
+  function renderDone() {
     const n = boxes.filter((x) => x.checked).length;
     const done = $("done");
-    done.textContent = n === 4 ? "All 4 done. Now call 1906 or Jubilee from outside." : `${n} of 4 done`;
+    done.textContent = n === 4 ? t("allDone") : t("done", { n });
     done.classList.toggle("all", n === 4);
     $("checkBar").style.width = (n / 4) * 100 + "%";
+  }
+  boxes.forEach((b) => b.addEventListener("change", () => {
+    if (b.checked && navigator.vibrate) { try { navigator.vibrate(12); } catch (_) { /* ignore */ } }
+    renderDone();
   }));
 
   /* ============================================================
-     Office open / closed (IST)
+     Office open / closed (India time) + jubilee mode
      ============================================================ */
-  (function openStatus() {
+  function istNow() {
+    const parts = Object.fromEntries(new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Asia/Kolkata", weekday: "short", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false,
+    }).formatToParts(new Date()).map((p) => [p.type, p.value]));
+    return { day: parts.weekday, y: +parts.year, m: +parts.month, mins: +parts.hour * 60 + +parts.minute, date: `${parts.year}-${parts.month}-${parts.day}` };
+  }
+  function renderOpen() {
+    const pill = $("openPill"), txt = $("openText");
+    pill.classList.remove("open", "closed");
     try {
-      const parts = Object.fromEntries(new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Kolkata", weekday: "short", hour: "2-digit", minute: "2-digit", hour12: false })
-        .formatToParts(new Date()).map((p) => [p.type, p.value]));
-      const day = parts.weekday, mins = +parts.hour * 60 + +parts.minute;
-      const workday = day !== "Sun";
-      const pill = $("openPill"), txt = $("openText");
-      if (workday && mins >= 540 && mins < 1020) { pill.classList.add("open"); txt.textContent = "Open now · until 5 PM"; }
-      else {
-        pill.classList.add("closed");
-        if (workday && mins < 540) txt.textContent = "Closed · opens today at 9 AM";
-        else if (day === "Sat" || day === "Sun") txt.textContent = "Closed · opens Monday at 9 AM";
-        else txt.textContent = "Closed · opens tomorrow at 9 AM";
-      }
-    } catch (_) { /* keep default label */ }
-  })();
+      const n = istNow(), workday = n.day !== "Sun";
+      if (HOLIDAYS.includes(n.date)) { pill.classList.add("closed"); txt.textContent = t("closedHoliday"); return; }
+      if (workday && n.mins >= 540 && n.mins < 1020) { pill.classList.add("open"); txt.textContent = t("openNow"); return; }
+      pill.classList.add("closed");
+      if (workday && n.mins < 540) txt.textContent = t("closedToday");
+      else if (n.day === "Sat" || n.day === "Sun") txt.textContent = t("closedMonday");
+      else txt.textContent = t("closedTomorrow");
+    } catch (_) { txt.textContent = t("officeHours"); }
+  }
+  function jubileeMode() {
+    const q = new URLSearchParams(location.search).get("jubilee");
+    if (["pre", "during", "after"].includes(q)) return q;
+    try {
+      const n = istNow();
+      if (n.y < JUBILEE.year || (n.y === JUBILEE.year && n.m < JUBILEE.month)) return "pre";
+      if (n.y === JUBILEE.year && n.m === JUBILEE.month) return "during";
+      return "after";
+    } catch (_) { return "pre"; }
+  }
+  const jMode = jubileeMode();
+  document.documentElement.dataset.jubilee = jMode;
+  function renderJubilee() {
+    $("jubKicker").textContent = t(`jubKicker.${jMode}`);
+    $("jubLede").textContent = t(`jubLede.${jMode}`);
+  }
+  $("memoryBtn").href = waLink("Hello Jubilee, here is my memory for your 25th anniversary (you may share it on your website): ");
+  if (THANKS.length) {
+    $("thanksGrid").innerHTML = THANKS.map((n) => `<figure class="note"><blockquote>“${esc(n.quote)}”</blockquote><figcaption><b>${esc(n.name)}</b>${n.since ? `<span>${esc(n.since)}</span>` : ""}</figcaption></figure>`).join("");
+    $("thanks").hidden = false;
+  }
+
+  /* ============================================================
+     Re-render language-dependent pieces
+     ============================================================ */
+  function renderAll() {
+    renderSizeLabels();
+    update();
+    showCyl(shown);
+    renderMapText();
+    renderDone();
+    renderOpen();
+    renderJubilee();
+  }
+  langListeners.push(renderAll);
+  applyDom();
+  renderAll();
 
   /* ============================================================
      Reveals + count-up
@@ -588,8 +953,8 @@
     const end = +node.dataset.count, plain = node.hasAttribute("data-plain");
     if (reduce) return;
     const t0 = performance.now(), dur = 1500, startV = plain ? end - 25 : 0;
-    const step = (t) => {
-      const k = clamp((t - t0) / dur, 0, 1), v = Math.round(startV + (end - startV) * (1 - Math.pow(1 - k, 4)));
+    const step = (now) => {
+      const k = clamp((now - t0) / dur, 0, 1), v = Math.round(startV + (end - startV) * (1 - Math.pow(1 - k, 4)));
       node.textContent = plain ? v : v.toLocaleString("en-IN");
       if (k < 1) requestAnimationFrame(step);
     };
@@ -610,9 +975,9 @@
   }
 
   /* ============================================================
-     Mobile action bar: step aside at the footer
+     Offline support (installed app). Skipped on local previews.
      ============================================================ */
-  const bar = $("actionBar");
-  new IntersectionObserver(([e]) => bar.classList.toggle("away", e.isIntersecting), { threshold: 0.2 })
-    .observe(document.querySelector(".footer"));
+  if ("serviceWorker" in navigator && !isLocal) {
+    addEventListener("load", () => navigator.serviceWorker.register("/sw.js").catch(() => { /* offline support is optional */ }));
+  }
 })();

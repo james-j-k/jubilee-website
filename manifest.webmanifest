@@ -1,0 +1,21 @@
+{
+  "name": "Jubilee Indane Home",
+  "short_name": "Jubilee",
+  "description": "Plan your Indane refill and reach Jubilee Indane Home, Pala.",
+  "id": "/",
+  "start_url": "/?source=app",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F7F9FA",
+  "theme_color": "#0D1B3E",
+  "lang": "en",
+  "icons": [
+    { "src": "/assets/logo/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/logo/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/logo/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Refill planner", "url": "/?source=app#refill" },
+    { "name": "Gas leak help", "url": "/?source=app#safety" }
+  ]
+}
