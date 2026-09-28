@@ -1,36 +1,9 @@
-# dependencies
-/node_modules
-
-# Next.js
-/.next
-/out
-
-# production
-/build
-/coverage
-
-# local environment files
-.env*
-!.env.example
-
-# Vercel local project state
+# local tooling
+.claude/
 .vercel
 
-# logs and local caches
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-.eslintcache
-.turbo
-
-# editor and operating-system files
+# OS / editor
+.DS_Store
+Thumbs.db
 .idea
 .vscode
-Thumbs.db
-
-# tooling
-*.tsbuildinfo
-.DS_Store
-.superdesign/tmp/
