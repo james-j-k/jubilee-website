@@ -53,9 +53,9 @@
     reminderSaved: "Reminder for {date} saved. Open it to add to your calendar.",
     reminderNeedDate: "Pick the date your cylinder was connected first.",
     forgot: "Your saved details were removed from this device.",
-    done: "{n} of 4 done", allDone: "All 4 done. Now call Jubilee from outside.",
+    done: "{n} of 4 done", allDone: "All 4 done. Now call Jubilee Indane Home from outside.",
     hintHome: "From your registered mobile: WhatsApp 75888 88824, or a missed call to 84549 55555.",
-    hintBiz: "Commercial bookings go to the Jubilee office on WhatsApp.",
+    hintBiz: "Commercial bookings go to the Jubilee Indane Home office on WhatsApp.",
     openNow: "Open now · until 5 PM", closedToday: "Closed · opens today at 9 AM",
     closedMonday: "Closed · opens Monday at 9 AM", closedTomorrow: "Closed · opens tomorrow at 9 AM",
     closedHoliday: "Closed today · public holiday", officeHours: "Office hours",
@@ -330,30 +330,30 @@
       short: "Small", name: "Compact 5 kg", spec: "Domestic · 5 kg",
       text: "Small and easy to carry. Good for one or two people, or as a spare alongside a main cylinder.",
       best: "Small households, students, working people", body: "Steel", weeks: 4,
-      ask: "Hello Jubilee, I'd like to ask about the 5 kg Indane cylinder.",
-      book: "Hello Jubilee, I'd like to book an Indane refill (5 kg).",
+      ask: "Hello Jubilee Indane Home, I'd like to ask about the 5 kg Indane cylinder.",
+      book: "Hello Jubilee Indane Home, I'd like to book an Indane refill (5 kg).",
     },
     "10": {
       short: "Composite", name: "10 kg composite", spec: "Domestic · 10 kg composite",
       text: "Made from composite material instead of steel, so it’s lighter to lift, doesn’t rust, and you can see how much gas is left.",
       best: "Homes that want a lighter cylinder", body: "Composite, see-through", weeks: 4,
-      ask: "Hello Jubilee, I'd like to ask about the 10 kg composite Indane cylinder.",
-      book: "Hello Jubilee, I'd like to book an Indane refill (10 kg composite).",
+      ask: "Hello Jubilee Indane Home, I'd like to ask about the 10 kg composite Indane cylinder.",
+      book: "Hello Jubilee Indane Home, I'd like to book an Indane refill (10 kg composite).",
     },
     "14.2": {
       short: "Home", name: "Standard 14.2 kg", spec: "Domestic · 14.2 kg",
       text: "The regular domestic Indane cylinder. New connections, refills and help with your supply, delivered on a route planned for your part of Pala.",
       best: "Most family kitchens", body: "Steel", weeks: 6,
-      ask: "Hello Jubilee, I'd like to ask about a new 14.2 kg Indane connection.",
-      book: "Hello Jubilee, I'd like to book an Indane refill (14.2 kg).",
+      ask: "Hello Jubilee Indane Home, I'd like to ask about a new 14.2 kg Indane connection.",
+      book: "Hello Jubilee Indane Home, I'd like to book an Indane refill (14.2 kg).",
     },
     "19": {
       short: "Business", name: "Commercial 19 kg", spec: "Commercial · 19 kg",
       text: "For kitchens that feed a lot of people. Tell us what you cook and how often, and we’ll work out a supply plan together.",
       best: "Commercial kitchens", body: "Steel", weeks: 2, commercial: true,
       who: ["Hotels", "Restaurants", "Bakeries", "Caterers", "Tea shops", "Hospitals", "Schools", "Hostels"],
-      ask: "Hello Jubilee, I'd like to ask about commercial 19 kg LPG for my business.",
-      book: "Hello Jubilee, I'd like to book a commercial 19 kg LPG refill.",
+      ask: "Hello Jubilee Indane Home, I'd like to ask about commercial 19 kg LPG for my business.",
+      book: "Hello Jubilee Indane Home, I'd like to book a commercial 19 kg LPG refill.",
     },
   };
   const KINDS = ["5", "10", "14.2", "19"];
@@ -666,7 +666,7 @@
       return;
     }
     const lines = [
-      "Hello Jubilee, I'd like to enquire about commercial LPG.",
+      "Hello Jubilee Indane Home, I'd like to enquire about commercial LPG.",
       `Business: ${name}`, `Type: ${type}`, `Cylinders a week: ${f.qty.value}`,
       f.area.value.trim() && `Area: ${f.area.value.trim()}`,
       f.contact.value.trim() && `Name: ${f.contact.value.trim()}`,
@@ -923,7 +923,7 @@
     $("jubKicker").textContent = t(`jubKicker.${jMode}`);
     $("jubLede").textContent = t(`jubLede.${jMode}`);
   }
-  $("memoryBtn").href = waLink("Hello Jubilee, here is my memory for your 25th anniversary (you may share it on your website): ");
+  $("memoryBtn").href = waLink("Hello Jubilee Indane Home, here is my memory for your 25th anniversary (you may share it on your website): ");
   if (THANKS.length) {
     $("thanksGrid").innerHTML = THANKS.map((n) => `<figure class="note"><blockquote>“${esc(n.quote)}”</blockquote><figcaption><b>${esc(n.name)}</b>${n.since ? `<span>${esc(n.since)}</span>` : ""}</figcaption></figure>`).join("");
     $("thanks").hidden = false;

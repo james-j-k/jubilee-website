@@ -746,3 +746,6 @@ html[lang=ml] .hero-ml,html[lang=ml] .route-ml,html[lang=ml] .sec-head .sec-ml{d
   .result-actions .remind[hidden] + .remind{grid-column:span 2}
   .book-strip .mono,.book-strip small{width:auto}
 }
+.menu-gas{flex-direction:column;align-items:stretch;gap:12px}
+.mg-call{justify-content:center}
+.mg-call{padding:8px 16px;text-align:center;line-height:1.3}
