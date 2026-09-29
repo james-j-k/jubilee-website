@@ -22,6 +22,9 @@
   const desktop = matchMedia("(min-width: 1024px)");
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
   const WA = "https://wa.me/919447071889";
+  // IndianOil's official Indane booking channels (use from the registered mobile number)
+  const BOOK_WA = "https://wa.me/917588888824?text=REFILL";
+  const BOOK_MISSED = "tel:8454955555";
   const waLink = (msg) => `${WA}?text=${encodeURIComponent(msg)}`;
   const isLocal = /^(localhost|127\.|\[::1\])/.test(location.hostname);
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -50,7 +53,9 @@
     reminderSaved: "Reminder for {date} saved. Open it to add to your calendar.",
     reminderNeedDate: "Pick the date your cylinder was connected first.",
     forgot: "Your saved details were removed from this device.",
-    done: "{n} of 4 done", allDone: "All 4 done. Now call 1906 or Jubilee from outside.",
+    done: "{n} of 4 done", allDone: "All 4 done. Now call Jubilee from outside.",
+    hintHome: "From your registered mobile: WhatsApp 75888 88824, or a missed call to 84549 55555.",
+    hintBiz: "Commercial bookings go to the Jubilee office on WhatsApp.",
     openNow: "Open now · until 5 PM", closedToday: "Closed · opens today at 9 AM",
     closedMonday: "Closed · opens Monday at 9 AM", closedTomorrow: "Closed · opens tomorrow at 9 AM",
     closedHoliday: "Closed today · public holiday", officeHours: "Office hours",
@@ -406,7 +411,7 @@
   const sizeBtns = $$(".size", sizes);
   const renderSizeLabels = () => sizeBtns.forEach((b) => (b.querySelector("small").textContent = info(b.dataset.kind).short));
 
-  const last = $("last"), weeks = $("weeks"), chips = $("chips"), consumer = $("consumer");
+  const last = $("last"), weeks = $("weeks"), chips = $("chips");
   const iso = (d) => new Date(d.getTime() - d.getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
   const today0 = new Date(); today0.setHours(0, 0, 0, 0);
   last.max = iso(today0);
@@ -444,17 +449,17 @@
   }
   roving(sizeBtns, setKind);
 
-  function bookingMessage() {
-    const num = consumer.value.trim();
-    return INFO[kind].book + (num ? ` My consumer number is ${num}.` : "");
-  }
 
   function update() {
     const w = +weeks.value;
     $("weeksOut").textContent = w === 1 ? t("week") : t("weeks", { n: w });
     weeks.style.setProperty("--fill", ((w - 1) / 11) * 100 + "%");
     $("specKg").textContent = info(kind).spec;
-    $("bookBtn").href = waLink(bookingMessage());
+    const commercial = !!INFO[kind].commercial;
+    $("bookBtn").href = commercial ? waLink(INFO[kind].book) : BOOK_WA;
+    $("missedBtn").hidden = commercial;
+    $("missedBtn").href = BOOK_MISSED;
+    $("bookHint").textContent = commercial ? t("hintBiz") : t("hintHome");
 
     const hasDate = !!last.value;
     $("gaugeStage").classList.toggle("empty", !hasDate);
@@ -512,14 +517,14 @@
 
   let deferredInstall = null;
   function save() {
-    store.set(PLAN_KEY, { kind, last: last.value, weeks: +weeks.value, consumer: consumer.value.trim() });
+    store.set(PLAN_KEY, { kind, last: last.value, weeks: +weeks.value });
     $("savedRow").hidden = false;
     maybeShowInstall();
   }
   function forget() {
     store.del(PLAN_KEY);
-    last.value = ""; consumer.value = "";
-    $("consumerBox").open = false; $("unsure").open = false;
+    last.value = "";
+    $("unsure").open = false;
     $("savedRow").hidden = true;
     setKind("14.2", false);
     weeks.value = INFO["14.2"].weeks;
@@ -530,11 +535,6 @@
 
   last.addEventListener("input", () => { if (last.value > last.max) last.value = last.max; save(); update(); });
   weeks.addEventListener("input", () => { $$("button", chips).forEach((c) => c.classList.remove("on")); save(); update(); });
-  consumer.addEventListener("input", () => {
-    const clean = consumer.value.replace(/[^0-9A-Za-z-]/g, "");
-    if (clean !== consumer.value) consumer.value = clean;
-    save(); update();
-  });
   $$("button", $("quickDates")).forEach((c) => c.addEventListener("click", () => {
     const d = new Date(today0); d.setDate(d.getDate() - +c.dataset.days);
     last.value = iso(d); save(); update();
@@ -553,7 +553,6 @@
       kind = s.kind;
       if (typeof s.last === "string" && /^\d{4}-\d{2}-\d{2}$/.test(s.last) && s.last <= last.max) last.value = s.last;
       weeks.value = clamp(+s.weeks || INFO[kind].weeks, 1, 12);
-      if (s.consumer) { consumer.value = String(s.consumer).replace(/[^0-9A-Za-z-]/g, "").slice(0, 20); $("consumerBox").open = true; }
       $("savedRow").hidden = false;
     } else {
       weeks.value = INFO[kind].weeks;

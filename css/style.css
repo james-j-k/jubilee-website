@@ -725,3 +725,24 @@ html[lang=ml] .hero-ml,html[lang=ml] .route-ml,html[lang=ml] .sec-head .sec-ml{d
 .tl-mk.edge-r{transform:translateX(calc(-100% + 2px))}
 .tl-mk.edge-r i{margin-right:0}
 .tl-mk.edge-r span{text-align:right!important}
+
+/* ---------- v9: official booking channels, Jubilee safety card ---------- */
+.result-actions{grid-template-columns:1fr 1fr}
+.result-actions .book{grid-column:1/-1}
+.result-actions .remind{padding:0 10px;text-align:center;line-height:1.2}
+.result-actions .remind[hidden]{display:none}
+.result-actions .remind[hidden] + .remind{grid-column:1/-1}
+.book-hint{position:relative;font-size:13px;line-height:1.5;color:var(--muted-on-ink)}
+.helpline .help-num{font-size:clamp(56px,17vw,104px);line-height:.9;letter-spacing:-.04em}
+.book-strip{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-top:22px}
+.book-strip .mono{color:var(--ink-3);width:100%}
+.book-strip a{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:999px;border:1.5px solid var(--ink);text-decoration:none;font-size:14px;transition:background .2s,color .2s}
+.book-strip a b{font-weight:700;font-variant-numeric:tabular-nums}
+.book-strip a:hover{background:var(--ink);color:#fff}
+.book-strip small{width:100%;font-size:13px;color:var(--ink-3)}
+@media (min-width:1024px){
+  .result-actions{grid-template-columns:1.4fr 1fr 1fr}
+  .result-actions .book{grid-column:auto}
+  .result-actions .remind[hidden] + .remind{grid-column:span 2}
+  .book-strip .mono,.book-strip small{width:auto}
+}
