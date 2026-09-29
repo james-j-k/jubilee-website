@@ -17,7 +17,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/Archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/Chilanka-malayalam-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/style.css?v=10">
+<link rel="stylesheet" href="css/style.css?v=11">
 <script>/* apply saved language before first paint */
 try{if(localStorage.getItem("jubilee.lang")==="ml")document.documentElement.lang="ml"}catch(e){}</script>
 <script>/* Vercel Web Analytics: cookie-free, aggregate counts; skipped on local previews */
@@ -56,9 +56,9 @@ if(!/^(localhost|127\.|\[::1\])/.test(location.hostname)){window.va=window.va||f
   </ul>
   <div class="nav-actions">
     <button type="button" class="lang-btn" data-lang-toggle></button>
-    <a class="btn btn-ink btn-sm nav-call" href="tel:+919447071889">
-      <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z"/></svg>
-      <span class="hide-sm">94470 71889</span><span class="show-sm" data-i18n="nav.call">Call</span>
+    <a class="btn btn-ink btn-sm nav-call" href="#refill">
+      <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 2h6v3h-1v1.1A7 7 0 0 1 19 13v6a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3v-6a7 7 0 0 1 5-6.9V5H9z"/></svg>
+      <span class="hide-sm" data-i18n="nav.bookLong">Book a refill</span><span class="show-sm" data-i18n="nav.book">Book</span>
     </a>
     <button type="button" class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menu">
       <span class="bars" aria-hidden="true"><i></i><i></i></span><span class="visually-hidden" data-i18n="nav.menu">Menu</span>
@@ -88,8 +88,9 @@ if(!/^(localhost|127\.|\[::1\])/.test(location.hostname)){window.va=window.va||f
       </div>
     </div>
     <div class="menu-cta">
-      <a class="btn btn-ink" href="tel:+919447071889"><span data-i18n="menu.call">Call 94470 71889</span></a>
-      <a class="btn btn-ghost" href="https://wa.me/919447071889" target="_blank" rel="noopener">WhatsApp</a>
+      <a class="btn btn-ink" href="https://wa.me/917588888824?text=REFILL" target="_blank" rel="noopener"><span data-i18n="menu.bookWa">Book on WhatsApp</span> <span class="num">75888&nbsp;88824</span></a>
+      <a class="btn btn-ghost" href="tel:8454955555"><span data-i18n="menu.missed">Missed call</span> <span class="num">84549&nbsp;55555</span></a>
+      <p class="menu-major"><span data-i18n="ct.major">Major enquiries</span> · <a href="tel:+919447071889">94470&nbsp;71889</a></p>
     </div>
   </div>
 </div>
@@ -111,7 +112,7 @@ if(!/^(localhost|127\.|\[::1\])/.test(location.hostname)){window.va=window.va||f
     <p class="lede" data-i18n-html="hero.lede">Jubilee Indane Home has delivered Indane LPG across Pala since 2001, <strong>planned route by route</strong> for about 14,500 homes and 600 businesses.</p>
     <div class="cta-row">
       <a class="btn btn-ink" href="#refill"><span data-i18n="hero.cta1">Plan your next refill</span> <span class="arr" aria-hidden="true">→</span></a>
-      <a class="btn btn-ghost" href="https://wa.me/919447071889" target="_blank" rel="noopener" data-i18n="hero.cta2">Message on WhatsApp</a>
+      <a class="btn btn-ghost" href="https://wa.me/917588888824?text=REFILL" target="_blank" rel="noopener" data-i18n="hero.cta2">Book on WhatsApp</a>
     </div>
     <div class="authorised">
       <img src="assets/logo/indianoil.webp" alt="IndianOil" width="200" height="200">
@@ -239,6 +240,7 @@ if(!/^(localhost|127\.|\[::1\])/.test(location.hostname)){window.va=window.va||f
           </button>
         </div>
         <p class="book-hint" id="bookHint"></p>
+        <div class="remind-done" id="remindDone" role="status" hidden></div>
       </div>
 
       <div class="timeline" id="timeline" aria-hidden="true">
@@ -378,20 +380,19 @@ if(!/^(localhost|127\.|\[::1\])/.test(location.hostname)){window.va=window.va||f
 <!-- ============ CONTACT ============ -->
 <section class="pad contact" id="contact" aria-labelledby="contactTitle">
   <div class="contact-top">
-    <p class="ml sec-ml" lang="ml">വിളിക്കൂ, അല്ലെങ്കിൽ ഓഫീസിലേക്ക് വരൂ</p>
+    <p class="ml sec-ml" lang="ml">ബുക്ക് ചെയ്യൂ, അല്ലെങ്കിൽ ഓഫീസിലേക്ക് വരൂ</p>
     <span class="open-pill" id="openPill"><i></i><span id="openText">Office hours</span></span>
   </div>
-  <h2 id="contactTitle"><a href="tel:+919447071889">+91 94470 71889</a></h2>
-  <div class="book-strip">
-    <span class="mono" data-i18n="ct.book">Book a refill</span>
-    <a href="https://wa.me/917588888824?text=REFILL" target="_blank" rel="noopener"><span data-i18n="ct.bookWa">WhatsApp</span> <b>75888 88824</b></a>
-    <a href="tel:8454955555"><span data-i18n="ct.bookMissed">Missed call</span> <b>84549 55555</b></a>
-    <small data-i18n="ct.bookNote">From your registered mobile number</small>
+  <h2 id="contactTitle" data-i18n="ct.book">Book a refill</h2>
+  <div class="book-big">
+    <a href="https://wa.me/917588888824?text=REFILL" target="_blank" rel="noopener"><span class="mono" data-i18n="ct.waLabel">WhatsApp · send REFILL</span><b>75888&nbsp;88824</b></a>
+    <a href="tel:8454955555"><span class="mono" data-i18n="ct.bookMissed">Missed call</span><b>84549&nbsp;55555</b></a>
   </div>
+  <p class="book-note" data-i18n="ct.bookNote">From your registered mobile number</p>
   <div class="cgrid">
+    <div class="ccard major"><h3 class="mono" data-i18n="ct.major">Major enquiries</h3><a class="major-tel" href="tel:+919447071889">94470&nbsp;71889</a><p class="ccard-note" data-i18n="ct.majorNote">New connections, commercial supply and other important matters.</p><p><a href="mailto:jubileeindanehome@gmail.com">jubileeindanehome@gmail.com</a></p><a class="clink" href="https://wa.me/919447071889" target="_blank" rel="noopener" data-i18n="ct.wa">WhatsApp ↗</a></div>
     <div class="ccard"><h3 class="mono" data-i18n="ct.office">Office</h3><p>Plot No 6217, Municipal Commercial Complex, Pala, Kerala 686575</p><a class="clink" href="https://maps.app.goo.gl/JtuemzYfFTmd3Qoj8" target="_blank" rel="noopener" data-i18n="ct.dir">Directions ↗</a></div>
     <div class="ccard"><h3 class="mono" data-i18n="ct.hours">Hours</h3><p data-i18n-html="ct.hoursText">Monday to Saturday<br>9:00 AM – 5:00 PM</p><p class="ccard-note" data-i18n="ct.holiday">Hours may differ on public holidays.</p></div>
-    <div class="ccard"><h3 class="mono" data-i18n="ct.write">Write</h3><p><a href="mailto:jubileeindanehome@gmail.com">jubileeindanehome@gmail.com</a></p><a class="clink" href="https://wa.me/919447071889" target="_blank" rel="noopener" data-i18n="ct.wa">WhatsApp ↗</a></div>
     <div class="ccard"><h3 class="mono" data-i18n="ct.godown">Godown</h3><p data-i18n="ct.godownText">LPG storage for the Pala routes</p><a class="clink" href="https://maps.app.goo.gl/q4JmcG9Swb8j3uTK9" target="_blank" rel="noopener" data-i18n="ct.map">View on Maps ↗</a></div>
   </div>
 </section>
@@ -466,7 +467,7 @@ if(!/^(localhost|127\.|\[::1\])/.test(location.hostname)){window.va=window.va||f
 </dialog>
 
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
-<script src="js/i18n-ml.js?v=10" defer></script>
-<script src="js/main.js?v=10" defer></script>
+<script src="js/i18n-ml.js?v=11" defer></script>
+<script src="js/main.js?v=11" defer></script>
 </body>
 </html>

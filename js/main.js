@@ -50,7 +50,10 @@
     bookBy: "Book by {date}", bookNow: "Book now", bookToday: "Book today",
     leftLine: "About {pct}% left. Runs out around {date}.",
     empty: "By your estimate this cylinder may already be empty.",
-    reminderSaved: "Reminder for {date} saved. Open it to add to your calendar.",
+    reminderSaved: "Reminder saved for {date}. Open the downloaded file to add it to your calendar.",
+    reminderBook: "On the day, book from your registered mobile:",
+    reminderBiz: "On the day, book on WhatsApp with Jubilee Indane Home:",
+    waRefill: "WhatsApp (send REFILL)", missedCall: "Missed call",
     reminderNeedDate: "Pick the date your cylinder was connected first.",
     forgot: "Your saved details were removed from this device.",
     done: "{n} of 4 done", allDone: "All 4 done. Now call Jubilee Indane Home from outside.",
@@ -451,6 +454,8 @@
 
 
   function update() {
+    $("remindDone").hidden = true;
+    $("bookHint").hidden = false;
     const w = +weeks.value;
     $("weeksOut").textContent = w === 1 ? t("week") : t("weeks", { n: w });
     weeks.style.setProperty("--fill", ((w - 1) / 11) * 100 + "%");
@@ -566,14 +571,23 @@
     const d = bookByDate, n = new Date(d.getTime() + 864e5);
     const ymd = (x) => `${x.getFullYear()}${String(x.getMonth() + 1).padStart(2, "0")}${String(x.getDate()).padStart(2, "0")}`;
     const stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d+/, "");
-    const summary = lang === "ml" ? `ഇൻഡേൻ റീഫിൽ ബുക്ക് ചെയ്യൂ (${kind} kg)` : `Book Indane refill (${kind} kg)`;
+    const commercial = !!INFO[kind].commercial;
+    // ICS text: escape \ ; , and turn newlines into \n; fold long lines
+    const icsText = (x) => x.replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\n/g, "\\n");
+    const fold = (line) => line.match(/.{1,60}/gu).join("\r\n ");
+    const summary = commercial
+      ? `Book LPG refill (19 kg): WhatsApp Jubilee Indane Home 9447071889`
+      : `Book Indane refill (${kind} kg): WhatsApp 7588888824 or missed call 8454955555`;
+    const details = commercial
+      ? `Book your commercial LPG refill on WhatsApp with Jubilee Indane Home: 9447071889\n${waLink(INFO[kind].book)}`
+      : `Book from your registered mobile number:\n- WhatsApp 7588888824 (send REFILL): ${BOOK_WA}\n- Missed call: 8454955555\n\nJubilee Indane Home, Pala. Major enquiries: 9447071889`;
     const ics = [
       "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Jubilee Indane Home//Refill planner//EN", "BEGIN:VEVENT",
       `UID:${stamp}-${kind}@jubileeindanehome`, `DTSTAMP:${stamp}`,
       `DTSTART;VALUE=DATE:${ymd(d)}`, `DTEND;VALUE=DATE:${ymd(n)}`,
-      `SUMMARY:${summary}`,
-      `DESCRIPTION:Call Jubilee Indane Home on +91 94470 71889 or message on WhatsApp: ${WA}`,
-      "BEGIN:VALARM", "TRIGGER:PT9H", "ACTION:DISPLAY", "DESCRIPTION:Book your Indane refill", "END:VALARM",
+      fold(`SUMMARY:${icsText(summary)}`),
+      fold(`DESCRIPTION:${icsText(details)}`),
+      "BEGIN:VALARM", "TRIGGER:PT9H", "ACTION:DISPLAY", fold(`DESCRIPTION:${icsText(summary)}`), "END:VALARM",
       "END:VEVENT", "END:VCALENDAR",
     ].join("\r\n");
     const url = URL.createObjectURL(new Blob([ics], { type: "text/calendar" }));
@@ -581,7 +595,15 @@
     a.href = url; a.download = "jubilee-refill-reminder.ics";
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(url), 2000);
-    showToast(t("reminderSaved", { date: fmt(d) }));
+    const box = $("remindDone");
+    box.innerHTML = commercial
+      ? `<b>${esc(t("reminderSaved", { date: fmt(d) }))}</b><span>${esc(t("reminderBiz"))}</span>
+         <a href="${waLink(INFO[kind].book)}" target="_blank" rel="noopener">WhatsApp <b>94470&nbsp;71889</b></a>`
+      : `<b>${esc(t("reminderSaved", { date: fmt(d) }))}</b><span>${esc(t("reminderBook"))}</span>
+         <a href="${BOOK_WA}" target="_blank" rel="noopener">${esc(t("waRefill"))} <b>75888&nbsp;88824</b></a>
+         <a href="${BOOK_MISSED}">${esc(t("missedCall"))} <b>84549&nbsp;55555</b></a>`;
+    box.hidden = false;
+    $("bookHint").hidden = true;
   });
 
   // "Add to home screen" (Chrome / Android), offered once someone uses the planner

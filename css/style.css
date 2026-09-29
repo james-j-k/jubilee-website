@@ -749,3 +749,31 @@ html[lang=ml] .hero-ml,html[lang=ml] .route-ml,html[lang=ml] .sec-head .sec-ml{d
 .menu-gas{flex-direction:column;align-items:stretch;gap:12px}
 .mg-call{justify-content:center}
 .mg-call{padding:8px 16px;text-align:center;line-height:1.3}
+
+/* ---------- v11: booking-first contact, major enquiries, reminder confirmation ---------- */
+.contact h2{white-space:normal}
+.book-big{display:grid;gap:10px;margin-top:18px}
+.book-big a{display:grid;gap:4px;padding:16px 18px;border-radius:18px;border:1.5px solid var(--ink);text-decoration:none;transition:background .2s,color .2s}
+.book-big a .mono{color:var(--ink-3);transition:color .2s}
+.book-big a b{font-stretch:120%;font-weight:800;font-size:clamp(28px,8vw,44px);letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+.book-big a:hover{background:var(--ink);color:#fff}
+.book-big a:hover .mono{color:var(--muted-on-ink)}
+.book-note{margin-top:10px;font-size:14px;color:var(--ink-2)}
+.ccard.major{background:var(--ink);color:#fff}
+.ccard.major h3{color:var(--muted-on-ink)}
+.ccard.major .ccard-note{color:var(--muted-on-ink)}
+.ccard.major a{color:#fff}
+.major-tel{font-stretch:120%;font-weight:800;font-size:26px;letter-spacing:-.02em;text-decoration:none;font-variant-numeric:tabular-nums}
+.menu-cta .num{font-weight:800;font-variant-numeric:tabular-nums}
+.menu-major{text-align:center;font-size:14px;color:var(--ink-2)}
+.menu-major a{font-weight:700;color:var(--ink)}
+.remind-done{position:relative;display:grid;gap:8px;padding:14px;border-radius:14px;background:rgba(31,138,91,.16);border:1px solid rgba(31,138,91,.5);font-size:14px;line-height:1.45;animation:rise .4s var(--ease) both}
+.remind-done[hidden]{display:none}
+.remind-done > b{color:#fff}
+.remind-done span{color:#DCE1EA}
+.remind-done a{display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:44px;padding:0 14px;border-radius:12px;background:rgba(255,255,255,.08);color:#fff;text-decoration:none}
+.remind-done a b{font-variant-numeric:tabular-nums}
+@media (min-width:600px){
+  .book-big{grid-template-columns:1fr 1fr;max-width:760px}
+}
+.book-hint[hidden]{display:none}

@@ -2,7 +2,7 @@
    Pages: network first, falling back to the saved copy when offline.
    Files (CSS, JS, fonts, images): served from the cache, refreshed in the background.
    Bump VERSION whenever you bump the ?v= numbers in the HTML. */
-const VERSION = "jubilee-v10";
+const VERSION = "jubilee-v11";
 const CORE = [
   "/",
   "/index.html",
@@ -10,9 +10,9 @@ const CORE = [
   "/terms.html",
   "/404.html",
   "/manifest.webmanifest",
-  "/css/style.css?v=10",
-  "/js/main.js?v=10",
-  "/js/i18n-ml.js?v=10",
+  "/css/style.css?v=11",
+  "/js/main.js?v=11",
+  "/js/i18n-ml.js?v=11",
   "/assets/fonts/Archivo-latin.woff2",
   "/assets/fonts/Chilanka-malayalam-400.woff2",
   "/assets/fonts/Chilanka-latin-400.woff2",

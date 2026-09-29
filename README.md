@@ -34,7 +34,7 @@ Then open http://localhost:5180. (Analytics and offline support switch themselve
 - Phone header: Call + Menu. The menu has a "Smell gas? Get help now" block with a direct Call Jubilee button
 - Route story (shorter on phones, with Skip)
 - Refill planner: 5 / 10 composite / 14.2 / 19 kg; quick date buttons; "people at home" estimate; calendar reminder; remembers entries on the device, with "Forget my details"; "Add to home screen" offered after first use (Chrome/Android)
-- Booking: household cylinders use IndianOil's official channels (`BOOK_WA` = WhatsApp 7588888824 with "REFILL", `BOOK_MISSED` = missed call 8454955555, in `js/main.js`); 19 kg commercial goes to the Jubilee office WhatsApp
+- Booking: household cylinders use IndianOil's official channels (`BOOK_WA` = WhatsApp 7588888824 with "REFILL", `BOOK_MISSED` = missed call 8454955555, in `js/main.js`); 19 kg commercial goes to the Jubilee Indane Home office WhatsApp. The header "Book" button, hero, menu and contact section all lead with these booking channels. The office number 9447071889 is shown only as "Major enquiries" (plus the gas-leak steps). Calendar reminders include both booking numbers
 - Cylinder shelf with swipe; business enquiry form that composes a WhatsApp message
 - Silver jubilee section: medallion, timeline, photo viewer (tap to enlarge, swipe), memory invitation, optional thank-you wall
 - Gas-safety checklist; live office status (India time)
